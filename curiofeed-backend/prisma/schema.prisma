@@ -1,49 +1,82 @@
 generator client {
-provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-provider = "postgresql"
-url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-id String @id @default(uuid())
-
-clerkId String @unique
-email String @unique
-name String?
-
-imageUrl String?
-
-onboardingCompleted Boolean @default(false)
-
-preferences UserPreference[]
-
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+  id                  String           @id @default(uuid())
+  email               String           @unique
+  name                String?
+  createdAt           DateTime         @default(now())
+  clerkId             String           @unique
+  imageUrl            String?
+  onboardingCompleted Boolean          @default(false)
+  updatedAt           DateTime         @updatedAt
+  preferences         UserPreference[]
 }
 
 model Topic {
-id String @id @default(uuid())
-
-name String @unique
-slug String @unique
-
-userPreferences UserPreference[]
-
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+  id              String           @id @default(uuid())
+  name            String           @unique
+  slug            String           @unique
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  userPreferences UserPreference[]
 }
 
 model UserPreference {
-id String @id @default(uuid())
+  id      String @id @default(uuid())
+  userId  String
+  topicId String
+  topic   Topic  @relation(fields: [topicId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
 
-userId String
-topicId String
+  @@unique([userId, topicId])
+}
 
-user User @relation(fields: [userId], references: [id])
-topic Topic @relation(fields: [topicId], references: [id])
+model Source {
+  id          String         @id @default(cuid())
+  name        String
+  websiteUrl  String
+  rssUrl      String         @unique
+  description String?
+  category    SourceCategory
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  articles    Article[]
+}
 
-@@unique([userId, topicId])
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  author      String?
+  publishedAt DateTime
+  sourceId    String
+  aiProcessed Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ingestedAt  DateTime @default(now())
+  rawContent  Json?
+  source      Source   @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([publishedAt])
+}
+
+enum SourceCategory {
+  AI
+  ENGINEERING
+  STARTUPS
+  PRODUCT
+  RESEARCH
+  SCIENCE
+  BUSINESS
+  DESIGN
 }
