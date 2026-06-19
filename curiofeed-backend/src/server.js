@@ -9,6 +9,7 @@ import morgan from "morgan";
 import webhookRoutes from "./routes/webhookRoutes.js";
 import userRoutes from "./routes/userRoutes.js"
 import topicRoutes from "./routes/topicRoutes.js";
+import articleRoutes from "./routes/articleRoutes.js";
 
 import { clerkMiddleware } from "@clerk/express";
 import { requireAuth } from "./middleware/authMiddleware.js";
@@ -40,17 +41,7 @@ app.use(
 
 app.use(helmet());
 
-console.log(
-  "PK:",
-  process.env.CLERK_PUBLISHABLE_KEY
-);
 
-console.log(
-  "SK:",
-  process.env.CLERK_SECRET_KEY
-    ? "present"
-    : "missing"
-);
 
 
 // Clerk middleware
@@ -84,6 +75,11 @@ app.use(
 app.use(
   "/api/v1/topics",
   topicRoutes
+);
+
+app.use(
+  "/api/v1/articles",
+  articleRoutes
 );
 
 
