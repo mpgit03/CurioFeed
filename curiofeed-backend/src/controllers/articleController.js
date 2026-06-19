@@ -1,4 +1,5 @@
-import {getArticles ,getArticleRedirectUrl} from "../services/articleService.js";
+import { getArticles , getArticleRedirectUrl , getArticleById} from "../services/articleService.js";
+import prisma from "../lib/prisma.js";
 
 export async function getArticlesController(req, res, next) {
     try {
@@ -20,6 +21,20 @@ export async function getArticlesController(req, res, next) {
     }
 };
 
+export async function getArticleByIdController(req, res, next) {
+    try {
+        const articleId = req.params.id;    
+        
+        const article = await getArticleById(articleId);
+        return res.status(200).json({
+            success: true,
+            data: article,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};   
 
 export async function openArticleController(req, res, next) {
     try {

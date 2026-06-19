@@ -5,7 +5,7 @@ const MAX_ARTICLE_AGE_DAYS = 90;
 
 export async function ingestSource(source) {
   const articles = await fetchFeed(source.rssUrl);
-  console.log(articles[0]);
+  // console.log(articles[0]);
   
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - MAX_ARTICLE_AGE_DAYS);

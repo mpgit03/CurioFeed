@@ -1,11 +1,16 @@
 import express from 'express';
-import {getArticlesController,openArticleController} from '../controllers/articleController.js';
+import { getArticlesController , openArticleController , getArticleByIdController} from '../controllers/articleController.js';
 const router = express.Router();
 
 router.get(
     '/',
     getArticlesController,
-)
+);
+
+router.get(
+    '/:id',
+    getArticleByIdController,
+);
 
 router.get(
     '/:id/open',

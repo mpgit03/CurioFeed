@@ -76,3 +76,21 @@ export async function getArticleRedirectUrl(articleId) {
 
     return article.url;
     }
+
+
+export async function getArticleById(articleId) {
+    const article = await prisma.article.findUnique({
+        where: {
+            id: articleId,
+        },
+    });
+    console.log("Article found:", article);
+
+    if (!article) {
+        const error = new Error("Article not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return article;
+};
