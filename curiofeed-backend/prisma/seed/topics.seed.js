@@ -41,6 +41,10 @@ slug: "productivity",
 name: "Design",
 slug: "design",
 },
+{
+  name: "Literature",
+  slug: "literature",
+},
 ];
 
 export async function seedTopics() {

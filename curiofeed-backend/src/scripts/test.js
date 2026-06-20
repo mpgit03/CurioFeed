@@ -10,7 +10,30 @@ import { getArticles } from "../services/articleService.js";
 
 // console.log(articles[0]);
 
+//  ingestAllSources();
 
-ingestAllSources();
+//  get articles with source and category
+
+ const stats = await prisma.source.findMany({
+  select: {
+    name: true,
+    category: true,
+    _count: {
+      select: {
+        articles: true,
+      },
+    },
+  },
+});
+
+console.table(
+  stats.map(source => ({
+    source: source.name,
+    category: source.category,
+    articles: source._count.articles,
+  }))
+); 
+ 
+
 // const result = await getArticles({ page: 1, limit: 10 });
 // console.log(result);

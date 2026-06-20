@@ -6,8 +6,29 @@ import {
 
 async function main() {
   try {
-    await seedTopics();
-    await seedSources();
+    //  await seedTopics();
+      // await seedSources();
+
+    /* verify seeding 
+
+    const response = await prisma.source.findMany({
+      select: {
+        name: true,
+        category: true,
+      },
+    });
+
+     console.log(response); */
+
+     /* await prisma.source.update({
+      where:{
+        id:"cmqkoblcy000bujo0du6tcmco"
+      },
+      data:{
+        rssUrl:"https://www.a16z.news/feed"
+      }
+     }); */
+
     
 
     console.log("Database seeded successfully");
