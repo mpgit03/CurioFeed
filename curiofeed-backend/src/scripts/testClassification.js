@@ -4,6 +4,11 @@ import { classifyArticle } from "../services/classificationService.js";
 const articles =
   await prisma.article.findMany({
     take: 20,
+    where:{
+      source:{
+        category:"HUMANITIES"
+      }
+    },
 
     include: {
       source: true,
