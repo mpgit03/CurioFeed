@@ -1,4 +1,153 @@
-export function classifyArticle(article) {
+
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
+
+function extractJson(responseText) {
+  try {
+    const cleaned = responseText
+      .replace(/```json\s*/gi, "")
+      .replace(/```/g, "")
+      .trim();
+
+    return JSON.parse(cleaned);
+  } catch (error) {
+    console.log("Failed to parse Gemini response:");
+    console.log(responseText);
+    throw error;
+  }
+}
+
+async function generateWithRetry(prompt) {
+  let lastError;
+
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    try {
+      console.log(`Attempt ${attempt}`);
+
+      return await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: prompt,
+      });
+
+    } catch (error) {
+      lastError = error;
+
+      console.log(
+        `Attempt ${attempt} failed`,
+        error.status
+      );
+
+      if (
+        error.status !== 503 &&
+        error.status !== 429
+      ) {
+        throw error;
+      }
+
+      if (attempt < 5) {
+        const delay =
+          Math.pow(2, attempt) * 1000;
+
+        console.log(
+          `Retrying in ${delay / 1000}s`
+        );
+
+        await new Promise(resolve =>
+          setTimeout(resolve, delay)
+        );
+      }
+    }
+  }
+
+  throw lastError;
+}
+
+export async function classifyArticles(articles) {
+  const prompt = `
+You are an expert content classification system.
+
+Allowed topics:
+
+Artificial Intelligence
+Programming
+Startups
+Technology
+Finance
+Science
+Business
+Productivity
+Design
+World Affairs
+Humanities
+
+Rules:
+
+- Classify each article independently
+- Maximum 3 topics per article
+- Only assign a topic if it is materially discussed
+- Do not infer weak associations
+- Confidence must be between 0.60 and 0.95
+- Return ONLY valid JSON
+
+Confidence Guide:
+
+0.95 = Primary topic
+
+0.90 = Strong primary topic
+
+0.80 = Strong secondary topic
+
+0.70 = Relevant but not dominant
+
+0.60 = Weak but meaningful relation
+
+Output format:
+
+[
+  {
+    "articleId": "string",
+    "topics": [
+      {
+        "topic": "AI",
+        "confidence": 0.95
+      }
+    ]
+  }
+]
+
+Articles:
+
+${JSON.stringify(articles)}
+`;
+
+  const response =
+    await generateWithRetry(prompt);
+
+  return extractJson(response.text);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* export function classifyArticle(article) {
   const topics = new Set();
 
   const text = [
@@ -92,4 +241,4 @@ export function classifyArticle(article) {
 }
 
   return [...topics];
-}
+} */
