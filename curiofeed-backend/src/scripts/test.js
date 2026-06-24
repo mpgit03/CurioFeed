@@ -34,59 +34,13 @@ console.table(
   }))
 );  */
  
-/* const sources= await prisma.source.findMany();
-
-console.table(
-  sources.map(s => ({
-    name:s.name,
-    category:s.category,
-  }))
-); */
-
-// const articles =
-//   await prisma.article.findMany({
-//     take: 10,
-//     where: {
-//       topicsClassified: true,
-//     },
-//     select: {
-//       title: true,
-//       articleTopics: {
-//         select: {
-//           confidence: true,
-//           topic: {
-//             select: {
-//               name: true,
-//             },
-//           },
-//         },
-//       },
-//     },
-//   });
-
-// console.dir(articles, { depth: null });
-
-const topics = await prisma.topic.findMany({
-  select: {
-    name: true,
-    _count: {
-      select: {
-        articleTopics: true,
-      },
-    },
+const response = await prisma.userPreference.findMany({
+  where: {
+    userId: "user_3FHCbeCfoRXbk7Mwf48J3a61M1h",
+  },
+  include: {
+    topic: true,
   },
 });
 
-console.table(
-  topics.map(topic => ({
-    topic: topic.name,
-    articles: topic._count.articleTopics,
-  }))
-);
-
-
-
-
-
-// const result = await getArticles({ page: 1, limit: 10 });
-// console.log(result);
+console.log(response);

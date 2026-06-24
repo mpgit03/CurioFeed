@@ -10,6 +10,7 @@ import webhookRoutes from "./routes/webhookRoutes.js";
 import userRoutes from "./routes/userRoutes.js"
 import topicRoutes from "./routes/topicRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
+import feedRoutes from "./routes/feedRoutes.js"
 
 import { clerkMiddleware } from "@clerk/express";
 import { requireAuth } from "./middleware/authMiddleware.js";
@@ -80,6 +81,11 @@ app.use(
 app.use(
   "/api/v1/articles",
   articleRoutes
+);
+
+app.use(
+  "/api/v1/feed",
+  feedRoutes
 );
 
 

@@ -4,11 +4,6 @@ export const requireAuth = (req, res, next) => {
 
   const auth = req.auth();
 
-  console.log("AUTH:", auth);
-  console.log("MIDDLEWARE ENTERED");
-
-
-  console.log("AUTH:", auth);
 
   if (!auth.userId) {
     console.log("FAILED IN MIDDLEWARE");
@@ -21,7 +16,6 @@ export const requireAuth = (req, res, next) => {
 
   req.userId = auth.userId;
 
-  console.log("MIDDLEWARE PASSED");
 
   next();
 };

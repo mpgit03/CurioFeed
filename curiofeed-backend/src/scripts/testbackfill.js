@@ -5,57 +5,64 @@ import { persistArticleTopics } from "../services/articletopicService.js";
 import { classifyArticles } from "../services/classificationService.js";
 
 
-
 while (true) {
 
-  const articles =
-    await prisma.article.findMany({
-      where: {
-        topicsClassified: false,
-      },
-      take: 30,
-      orderBy: {
-        publishedAt: "desc",
-      },
+  try {
+
+    const articles =
+      await prisma.article.findMany({
+        where: {
+          topicsClassified: false,
+        },
+        take: 20,
+      });
+
+    if (articles.length === 0) {
+      break;
+    }
+
+    const payload =
+      articles.map(article => ({
+        articleId: article.id,
+        title: article.title,
+        description: article.description,
+      }));
+
+    const start = Date.now();
+
+    const classifications =
+      await classifyArticles(payload);
+
+    const responseTime =
+      Date.now() - start;
+
+    console.log({
+      articles: articles.length,
+      responseTime,
     });
 
-  if (articles.length === 0) {
+    await persistArticleTopics(
+      classifications
+    );
+
+    await new Promise(resolve =>
+      setTimeout(resolve, 5000)
+    );
+
+  } catch (error) {
+
+    console.error(error.message);
+
+  if(error.status === 429){
+    console.log(
+      "Quota exhausted. Stopping backfill."
+    );
+
     break;
   }
 
-  const payload =
-    articles.map(article => ({
-      articleId: article.id,
-      title: article.title,
-      description: article.description,
-    }));
-
-  const start = Date.now();
-
-  const classifications =
-    await classifyArticles(payload);
-
-  const responseTime =
-    Date.now() - start;
-
-  console.log({
-    articles: articles.length,
-    responseTime,
-  });
-
-  
-console.log({
-  articlesFetched: articles.length,
-  classificationsReturned:
-    classifications.length,
-});
-
-  await persistArticleTopics(
-    classifications
-  );
-  break;
-
-
+  continue;
+  }
 }
 
 await prisma.$disconnect();
