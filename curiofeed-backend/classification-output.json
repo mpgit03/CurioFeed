@@ -1,0 +1,657 @@
+``````json
+[
+  {
+    "articleId": "cmqmm80q10015ujv4jllu50m1",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmm8022000kujv49pm3btfo",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmm7zzv0000ujv44rkehr3l",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmm80q10016ujv4j9b0kous",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqlc1i080000ujmw6u9saba6",
+    "topics": [
+      {
+        "topic": "AI",
+        "confidence": 0.95
+      },
+      {
+        "topic": "DESIGN",
+        "confidence": 0.90
+      },
+      {
+        "topic": "ENGINEERING",
+        "confidence": 0.80
+      }
+    ]
+  }
+]
+````
+
+``````json
+[
+  {
+    "articleId": "cmqmiw64p0000ujosxmhn0ook",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7ll000tujos7lbkuxaw",
+    "topics": [
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7ll000uujost2jybd00",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.70
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7ll000vujoskkazqqld",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7ll000wujosc74uaubt",
+    "topics": [
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm2000aujbwmp61yheb",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm2000bujbwp20ktib1",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.95
+      },
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw64p0001ujos8wxkvs9t",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.70
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw6hy000fujosytvmpxpk",
+    "topics": [
+      {
+        "topic": "ENGINEERING",
+        "confidence": 0.95
+      },
+      {
+        "topic": "AI",
+        "confidence": 0.90
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7ll000xujos0mnvbaeq",
+    "topics": [
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      }
+    ]
+  }
+]
+```
+
+```json
+[
+  {
+    "articleId": "cmqmiw6hz000lujosp7554j6h",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw6hx0009ujoszg1sdgbj",
+    "topics": [
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw6hy000eujosvjm7x6mn",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmjqohz000puj8053mmcmuc",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqm1kpfj000xujwkbsl3exqe",
+    "topics": [
+      {
+        "topic": "ENGINEERING",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw64p0002ujosp87ov3ep",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      },
+      {
+        "topic": "AI",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm2000cujbwvr8ta4nw",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.90
+      },
+      {
+        "topic": "ENGINEERING",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7lm000yujosaqkd3sa3",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7lm000zujos34l31fcc",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm2000dujbwe0amiumc",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.90
+      }
+    ]
+  }
+]
+```
+
+```json
+[
+  {
+    "articleId": "cmqmidqm2000eujbw1z6l37ll",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmjqomk0014uj80ak3bp78w",
+    "topics": [
+      {
+        "topic": "AI",
+        "confidence": 0.90
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7lm0010ujoshpvww2jq",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw6hy000dujos99ukw07e",
+    "topics": [
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      },
+      {
+        "topic": "AI",
+        "confidence": 0.70
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw64p0003ujosjf0tkvtx",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmm80q10015ujv4jllu50m1",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmn6h4j0000ujqox5yw2oya",
+    "topics": [
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.90
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.80
+      },
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.70
+      }
+    ]
+  },
+  {
+    "articleId": "cmqlbjyyi0001ujq49bbo1ban",
+    "topics": [
+      {
+        "topic": "AI",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqlbjyvs0000ujq4vgery8qa",
+    "topics": [
+      {
+        "topic": "AI",
+        "confidence": 0.95
+      },
+      {
+        "topic": "ENGINEERING",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm3000fujbw9cxowazw",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.95
+      }
+    ]
+  }
+]
+```
+
+```json
+[
+  {
+    "articleId": "cmqmiw6hx000aujosungg16oc",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7lm0011ujos1548bssm",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7lm0012ujosfgq3qd92",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqp8001oujbwao2ibyq2",
+    "topics": [
+      {
+        "topic": "AI",
+        "confidence": 0.95
+      },
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.90
+      },
+      {
+        "topic": "ENGINEERING",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7lm0013ujosnnvdr11z",
+    "topics": [
+      {
+        "topic": "AI",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.90
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw64p0004ujosct8vwgi0",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm3000gujbwcbov9lu8",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw6hz000mujos2zbjksmz",
+    "topics": [
+      {
+        "topic": "ENGINEERING",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7lm0014ujosfhp4ix97",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw6hx000bujosnsyhxixf",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  }
+]
+```
+
+```json
+[
+  {
+    "articleId": "cmqmidqm3000hujbwkqu7ea3p",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.95
+      },
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw7lm0015ujos7dj61g4c",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "AI",
+        "confidence": 0.90
+      },
+      {
+        "topic": "ENGINEERING",
+        "confidence": 0.70
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm3000iujbw1eau68o1",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqp8001pujbwg2f66la4",
+    "topics": [
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "AI",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm3000jujbw62xbtssc",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw6i0000qujosmozte83b",
+    "topics": [
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmiw6i0000pujosvdr8kurn",
+    "topics": [
+      {
+        "topic": "STARTUPS",
+        "confidence": 0.95
+      },
+      {
+        "topic": "BUSINESS",
+        "confidence": 0.80
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmm8022000kujv49pm3btfo",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmm7zzv0000ujv44rkehr3l",
+    "topics": [
+      {
+        "topic": "HUMANITIES",
+        "confidence": 0.95
+      }
+    ]
+  },
+  {
+    "articleId": "cmqmidqm3000kujbww1hk7cr2",
+    "topics": [
+      {
+        "topic": "SCIENCE",
+        "confidence": 0.95
+      }
+    ]
+  }
+]
+```
+

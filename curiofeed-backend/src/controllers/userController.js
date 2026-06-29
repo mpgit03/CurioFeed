@@ -4,7 +4,7 @@ import { updateUserPreferences,} from "../services/userService.js";
 
 export const updatePreferences =
 async (req, res) => {
-   console.log("CONTROLLER ENTERED");
+   
 try {
 
 

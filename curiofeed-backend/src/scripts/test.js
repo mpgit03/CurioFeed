@@ -34,13 +34,22 @@ console.table(
   }))
 );  */
  
-const response = await prisma.userPreference.findMany({
-  where: {
-    userId: "user_3FHCbeCfoRXbk7Mwf48J3a61M1h",
-  },
-  include: {
-    topic: true,
-  },
+// const response = await prisma.userPreference.findMany({
+//   where: {
+//     userId: "user_3FHCbeCfoRXbk7Mwf48J3a61M1h",
+//   },
+//   include: {
+//     topic: true,
+//   },
+// });
+
+// console.log(response);
+
+const response = await prisma.article.findMany({
+  where:{
+    topicsClassified:true,
+  }
 });
 
-console.log(response);
+console.log(response.length
+);

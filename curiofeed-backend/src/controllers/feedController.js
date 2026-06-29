@@ -19,8 +19,7 @@ export async function getFeedController(
     throw new Error("User does not exist");
    }
 
-    console.log(user.id);
-    
+
     const feed = await getFeed({
         userId: user.id,
         limit: 10,
