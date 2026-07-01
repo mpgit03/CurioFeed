@@ -5,6 +5,7 @@ import { requireAuth }
   from "../middleware/authMiddleware.js";
 
 import {
+  getExplore,
   getFeedController,
 }
   from "../controllers/feedController.js";
@@ -15,6 +16,12 @@ router.get(
   "/",
   requireAuth,
   getFeedController
+);
+
+router.get(
+  "/explore",
+  requireAuth,
+  getExplore
 );
 
 export default router;

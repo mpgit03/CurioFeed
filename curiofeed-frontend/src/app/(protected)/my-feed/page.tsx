@@ -1,15 +1,11 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
-
 import FeedList from "@/components/feed/FeedList";
-import { getFeed } from "@/services/feed";
-import { FeedArticle } from "@/types/feed";
+
 import LoadingFeed from "@/components/feed/LoadingFeed";
 import EmptyFeed from "@/components/feed/EmptyFeed";
 import ErrorFeed from "@/components/feed/ErrorFeed";
-import {useFeed} from "@/hooks/useFeed";
+import { useArticles} from "@/hooks/useArticles";
 
 
 
@@ -22,7 +18,7 @@ const {
         loading,
         error,
         loadFeed,
-    } = useFeed();
+    } = useArticles("/api/v1/feed");
 
 if (loading) {
     return <LoadingFeed />;

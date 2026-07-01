@@ -1,7 +1,9 @@
 // controllers/feedController.js
 
 import prisma from "../lib/prisma.js";
+import { getExploreFeed } from "../services/exploreService.js";
 import { getFeed } from "../services/feedService.js";
+
 
 export async function getFeedController(
   req,
@@ -40,4 +42,26 @@ export async function getFeedController(
 
 
    
+}
+
+export async function getExplore(req,res) {
+    try{
+        const limit = Number(req.query.limit)||20;
+
+        const articles = await getExploreFeed(limit);
+        
+        res.json({
+            success:true,
+           feed:articles
+        });
+    }catch(error){
+        console.log(error);
+
+        res.status(500).json({
+            success:false,
+            message:"Failed to load explore feed",
+        });
+        
+    }
+    
 }

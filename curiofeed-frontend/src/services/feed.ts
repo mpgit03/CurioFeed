@@ -8,11 +8,12 @@ interface FeedResponse {
   feed: FeedArticle[];
 }
 
-export async function getFeed(
+export async function getArticles(
+  endpoint: string,
   token: string
 ): Promise<FeedArticle[]> {
   const response = await fetch(
-    `${API_URL}/api/v1/feed`,
+    `${API_URL}${endpoint}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,7 +22,7 @@ export async function getFeed(
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch feed");
+    throw new Error("Failed to fetch articles");
   }
 
   const data: FeedResponse =

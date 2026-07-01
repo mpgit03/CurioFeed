@@ -3,11 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 
-import { getFeed } from "@/services/feed";
+import { getArticles } from "@/services/feed";
 import { FeedArticle } from "@/types/feed";
 
 
-export function useFeed() {
+export function useArticles(endpoint:string) {
 
 const [articles, setArticles] = useState<FeedArticle[]>([]);
 const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ const loadFeed = useCallback(async()=>{
         throw new Error("Authentication failed");
       }
 
-      const articles = await getFeed(token);
+      const articles = await getArticles( endpoint , token );
 
       setArticles(articles);
     } catch (error) {
@@ -42,7 +42,7 @@ const loadFeed = useCallback(async()=>{
 
 useEffect(()=>{
     loadFeed();
-},[loadFeed])
+},[endpoint])
 
 
 return {
