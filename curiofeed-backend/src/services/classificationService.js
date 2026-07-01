@@ -6,7 +6,7 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-function extractJson(responseText) {
+export function extractJson(responseText) {
   try {
     const cleaned = responseText
       .replace(/```json\s*/gi, "")
@@ -21,7 +21,7 @@ function extractJson(responseText) {
   }
 }
 
-async function generateWithRetry(prompt) {
+export async function generateWithRetry(prompt) {
   let lastError;
 
   for (let attempt = 1; attempt <= 5; attempt++) {
@@ -86,24 +86,45 @@ Humanities
 
 Rules:
 
-- Classify each article independently
-- Maximum 3 topics per article
-- Only assign a topic if it is materially discussed
-- Do not infer weak associations
-- Confidence must be between 0.60 and 0.95
-- Return ONLY valid JSON
+- Classify each article independently.
+- Maximum 3 topics per article.
+- Only assign a topic if it is materially discussed.
+- Do not infer weak associations.
+- Confidence must be between 0.60 and 0.95.
 
 Confidence Guide:
 
 0.95 = Primary topic
-
 0.90 = Strong primary topic
-
 0.80 = Strong secondary topic
-
 0.70 = Relevant but not dominant
-
 0.60 = Weak but meaningful relation
+
+India Classification:
+
+Determine whether the article is primarily related to India.
+
+Set "isIndiaRelated" to true ONLY if the article is primarily about:
+
+- Indian government, politics, or public policy
+- Indian companies or startups
+- Indian economy or financial markets
+- Technology, science, or business developments centered on India
+- Events occurring in India
+- People, organizations, or institutions whose primary context is India
+
+Set "isIndiaRelated" to false if:
+
+- India is mentioned only briefly.
+- India is one of many countries discussed.
+- The article is about a global topic without a primary focus on India.
+- The connection to India is weak or incidental.
+
+Return ONLY valid JSON.
+
+Do not include markdown.
+Do not wrap the response in triple backticks.
+Do not include explanations.
 
 Output format:
 
@@ -112,10 +133,11 @@ Output format:
     "articleId": "string",
     "topics": [
       {
-        "topic": "AI",
+        "topic": "Artificial Intelligence",
         "confidence": 0.95
       }
-    ]
+    ],
+    "isIndiaRelated": true
   }
 ]
 
@@ -124,12 +146,10 @@ Articles:
 ${JSON.stringify(articles)}
 `;
 
-  const response =
-    await generateWithRetry(prompt);
+  const response = await generateWithRetry(prompt);
 
   return extractJson(response.text);
 }
-
 
 
 

@@ -62,6 +62,7 @@ model Article {
   publishedAt       DateTime
   sourceId          String
   topicsClassified  Boolean @default(false)
+  isIndiaRelated    Boolean @default(false)
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   ingestedAt        DateTime       @default(now())

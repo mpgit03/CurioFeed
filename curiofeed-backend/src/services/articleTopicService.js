@@ -53,16 +53,19 @@ export async function persistArticleTopics(
     skipDuplicates: true,
   });
 
-  await prisma.article.updateMany({
-    where: {
-      id: {
-        in: [...classifiedArticleIds],
+  await prisma.$transaction(
+  classifications.map(classification =>
+    prisma.article.update({
+      where: {
+        id: classification.articleId,
       },
-    },
-    data: {
-      topicsClassified: true,
-    },
-  });
+      data: {
+        topicsClassified: true,
+        isIndiaRelated: classification.isIndiaRelated,
+      },
+    })
+  )
+);
 
   console.log({
   articleTopicRows:
