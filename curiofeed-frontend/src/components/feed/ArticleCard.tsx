@@ -81,7 +81,7 @@ export default function ArticleCard({
           {article.articleTopics.map(({ topic }) => (
             <TopicBadge
               key={topic.id}
-              topic={topic.name}
+              topic={topic?.name}
             />
           ))}
 

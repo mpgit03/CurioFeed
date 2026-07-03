@@ -15,34 +15,47 @@ const [error, setError] = useState<string | null>(null);
 
 const {getToken} = useAuth();   
 
-const loadFeed = useCallback(async()=>{
-    try {
-      setLoading(true);
-      setError(null);
+const loadFeed = useCallback(async () => {
+  console.log("loadFeed called");
 
-      const token = await getToken();
+  try {
+    setLoading(true);
+    setError(null);
 
-      if (!token) {
-        throw new Error("Authentication failed");
-      }
+    console.log("Getting token...");
 
-      const articles = await getArticles( endpoint , token );
+    const token = await getToken();
 
-      setArticles(articles);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("Something went wrong");
-      }
-    } finally {
-      setLoading(false);
+    console.log("Token:", token);
+
+    if (!token) {
+      throw new Error("Authentication failed");
     }
-},[getToken]);
 
-useEffect(()=>{
-    loadFeed();
-},[endpoint])
+    console.log("Fetching articles...");
+
+    const articles = await getArticles(endpoint, token);
+
+    console.log("Fetched:", articles.length);
+
+    setArticles(articles);
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof Error) {
+      setError(error.message);
+    } else {
+      setError("Something went wrong");
+    }
+  } finally {
+    setLoading(false);
+  }
+}, [getToken, endpoint]);
+
+useEffect(() => {
+  console.log("useEffect");
+  loadFeed();
+}, [loadFeed]);
 
 
 return {

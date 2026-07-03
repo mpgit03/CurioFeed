@@ -2,6 +2,7 @@ import prisma from "../lib/prisma.js";
 
 export async function getFeed({
   userId,
+  page = 1,
   limit = 20
 }) {
 
@@ -150,5 +151,11 @@ export async function getFeed({
       b.score - a.score
   );
 
-  return feed.slice(0, limit);
+  const skip =
+    (page - 1) * limit;
+
+  return feed.slice(
+      skip,
+      skip + limit
+  );
 }

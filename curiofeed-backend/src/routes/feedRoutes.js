@@ -7,6 +7,7 @@ import { requireAuth }
 import {
   getExplore,
   getFeedController,
+  getIndia,
 }
   from "../controllers/feedController.js";
 
@@ -22,6 +23,12 @@ router.get(
   "/explore",
   requireAuth,
   getExplore
+);
+
+router.get(
+  "/india",
+  requireAuth,
+  getIndia
 );
 
 export default router;
