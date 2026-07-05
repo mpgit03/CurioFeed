@@ -3,7 +3,8 @@ import prisma from "../lib/prisma.js";
 export async function getFeed({
   userId,
   page = 1,
-  limit = 20
+  limit = 20,
+  cursor=null
 }) {
 
   const userPreferences =

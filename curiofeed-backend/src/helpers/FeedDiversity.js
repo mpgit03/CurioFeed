@@ -1,5 +1,7 @@
-const MAX_PER_TOPIC = 3;
-const MAX_PER_SOURCE = 2;
+import { PAGE_SIZE,
+        MAX_PER_TOPIC,
+        MAX_PER_SOURCE 
+} from "../constants/feed.js"
 
 function getPrimaryTopic(article) {
     if (!article.articleTopics?.length) {
@@ -10,6 +12,111 @@ function getPrimaryTopic(article) {
         current.confidence > best.confidence ? current : best
     ).topicId;
 }
+
+
+
+
+export function buildRankedFeed(
+    candidates,
+    {
+        PAGE_SIZE = 20,
+        MAX_PER_TOPIC = 3,
+        MAX_PER_SOURCE = 2,
+    } = {}
+) {
+    const rankedFeed = [];
+    let remainingQueue = [...candidates];
+
+    let round = 0;
+
+    while (remainingQueue.length > 0) {
+        const topicCounts = new Map();
+        const sourceCounts = new Map();
+
+        const accepted = [];
+        const skipped = [];
+
+        // Relax diversity constraints after each round.
+        const topicLimit =
+            round === 0
+                ? MAX_PER_TOPIC
+                : round === 1
+                ? MAX_PER_TOPIC + 1
+                : Infinity;
+
+        const sourceLimit =
+            round === 0
+                ? MAX_PER_SOURCE
+                : round === 1
+                ? MAX_PER_SOURCE + 1
+                : Infinity;
+
+        for (const article of remainingQueue) {
+            // Current page is full.
+            if (accepted.length === PAGE_SIZE) {
+                skipped.push(article);
+                continue;
+            }
+
+            const primaryTopic = getPrimaryTopic(article);
+
+            const topicCount = primaryTopic
+                ? topicCounts.get(primaryTopic) ?? 0
+                : 0;
+
+            const sourceCount =
+                sourceCounts.get(article.sourceId) ?? 0;
+
+            const exceedsTopic =
+                primaryTopic && topicCount >= topicLimit;
+
+            const exceedsSource =
+                sourceCount >= sourceLimit;
+
+            if (exceedsTopic || exceedsSource) {
+                skipped.push(article);
+                continue;
+            }
+
+            accepted.push(article);
+
+            if (primaryTopic) {
+                topicCounts.set(primaryTopic, topicCount + 1);
+            }
+
+            sourceCounts.set(
+                article.sourceId,
+                sourceCount + 1
+            );
+        }
+
+        // Safety: if nothing could be accepted, append the rest
+        // in recency order and terminate.
+        if (accepted.length === 0) {
+            rankedFeed.push(...remainingQueue);
+            break;
+        }
+
+        rankedFeed.push(...accepted);
+
+        remainingQueue = skipped;
+
+        round++;
+    }
+
+    return rankedFeed;
+}
+
+
+
+
+
+
+
+/*                                             */
+
+
+
 
 export function applyFeedDiversity(articles, maxArticles) {
     const selected = [];

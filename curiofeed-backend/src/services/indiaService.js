@@ -1,12 +1,9 @@
 import prisma from "../lib/prisma.js";
-import { applyFeedDiversity } from "../helpers/FeedDiversity.js";
-const CANDIDATE_LIMIT = 100;
+import { buildRankedFeed } from "../helpers/FeedDiversity.js";
+import { CANDIDATE_WINDOW_SIZE } from "../constants/feed.js";
 
-export async function getIndiaFeed({
-     page=1,
-     limit = 20
-}) {
-    const articles = await prisma.article.findMany({
+export async function getIndiaFeed({}) {
+    const candidates = await prisma.article.findMany({
         where: {
             topicsClassified: true,
             isIndiaRelated: true,
@@ -22,14 +19,11 @@ export async function getIndiaFeed({
         orderBy: {
             publishedAt: "desc",
         },
-        take: CANDIDATE_LIMIT,
+        take: CANDIDATE_WINDOW_SIZE,
     });
 
-    const diversified = await applyFeedDiversity(articles);
-    
-    const skip = (page-1)*limit;
+    const rankedFeed = buildRankedFeed(candidates,{});
 
-    return diversified.slice( skip, skip + limit);
-
+    return rankedFeed;
    
 }

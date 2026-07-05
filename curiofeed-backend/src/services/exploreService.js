@@ -1,16 +1,15 @@
-import { applyFeedDiversity } from "../helpers/FeedDiversity.js";
+
+import { buildRankedFeed } from "../helpers/FeedDiversity.js";
 import prisma from "../lib/prisma.js";
-
-
-const CANDIDATE_LIMIT = 100;
-
+import {CANDIDATE_WINDOW_SIZE} from "../constants/feed.js"
   
-export async function getExploreFeed({ page = 1 ,limit = 20 }) {
-  const articles = await prisma.article.findMany({
-    where: {
-      topicsClassified: true,
-    },
+export async function getExploreFeed({ page = 1 ,limit = 20 ,cursor=null}) {
+  
 
+  const candidates = await prisma.article.findMany({
+    where:{
+      topicsClassified:true,
+    },
     include: {
       source: true,
       articleTopics: {
@@ -20,24 +19,19 @@ export async function getExploreFeed({ page = 1 ,limit = 20 }) {
       },
     },
 
-    orderBy: {
-      publishedAt: "desc",
-    },
+    orderBy: [
+      {
+        publishedAt:"desc",
+      },
+      {
+        id:"desc",
+      },
+    ],
 
-    take: CANDIDATE_LIMIT,
+    take: CANDIDATE_WINDOW_SIZE,
   });
 
-  const diversified =
-    applyFeedDiversity(
-        articles,
-        CANDIDATE_LIMIT
-    );
+  const rankedFeed = buildRankedFeed(candidates,{})
 
-  const skip =
-      (page - 1) * limit;
-
-  return diversified.slice(
-      skip,
-      skip + limit
-  );
+  return rankedFeed;
 }
