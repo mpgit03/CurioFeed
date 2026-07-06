@@ -17,6 +17,7 @@ model User {
   onboardingCompleted Boolean          @default(false)
   updatedAt           DateTime         @updatedAt
   preferences         UserPreference[]
+  followedSources     UserSourceFollow[]
 }
 
 model Topic {
@@ -39,6 +40,19 @@ model UserPreference {
   @@unique([userId, topicId])
 }
 
+model UserSourceFollow {
+  userId String
+  sourceId String
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId] , references: [id],onDelete: Cascade)
+  source Source @relation(fields: [sourceId] , references: [id] , onDelete: Cascade)
+
+  @@id([userId,sourceId])
+  @@index([userId])
+  @@index([sourceId])
+}
+
 model Source {
   id          String         @id @default(cuid())
   name        String
@@ -50,6 +64,8 @@ model Source {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   articles    Article[]
+  followers   UserSourceFollow[]
+  
 }
 
 model Article {

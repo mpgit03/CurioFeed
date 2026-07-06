@@ -11,6 +11,7 @@ import userRoutes from "./routes/userRoutes.js"
 import topicRoutes from "./routes/topicRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
 import feedRoutes from "./routes/feedRoutes.js"
+import followRoutes from "./routes/followRoutes.js"
 
 import { clerkMiddleware } from "@clerk/express";
 import { requireAuth } from "./middleware/authMiddleware.js";
@@ -87,6 +88,12 @@ app.use(
   "/api/v1/feed",
   feedRoutes
 );
+
+
+app.use(
+  "/api/v1/sources",
+  followRoutes
+)
 
 
 app.listen(PORT, () => {
