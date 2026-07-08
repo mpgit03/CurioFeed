@@ -1,5 +1,5 @@
     import prisma from "../lib/prisma.js";
-    import { followSource,unfollowSource,getFollowedSources } from "../services/FollowService.js";
+    import { followSource,unfollowSource,getFollowedSources, getFollowingFeed } from "../services/FollowService.js";
 
     export async function followSourceController(req,res,next){
         try{
@@ -54,4 +54,21 @@
     } catch (error) {
         next(error);
     }
+}
+
+export async function getFollowingFeedController(req,res,next){
+        try{
+            const rankedArticles = await getFollowingFeed({
+                userId: req.user.id,
+            });
+            console.log(rankedArticles[0]);
+            
+            res.status(200).json({
+                success:true,
+                feed:rankedArticles,
+            });
+        }catch(error){
+           next(error);
+        }
+        
 }

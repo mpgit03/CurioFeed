@@ -71,6 +71,15 @@ const loadFeed = useCallback(async () => {
   }
 }, [getToken, endpoint]);
 
+
+function removeArticlesBySource(sourceId:string){
+  setArticles(prev=>
+    prev.filter(article => article.source.id !== sourceId)
+  );
+}
+
+
+
 useEffect(() => {
   console.log("useEffect");
   loadFeed();
@@ -85,6 +94,7 @@ return {
     page,
     setPage:changePage,
     hasMore,
+    removeArticlesBySource,
 
 };
 

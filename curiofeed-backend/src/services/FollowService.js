@@ -1,4 +1,7 @@
 import prisma from "../lib/prisma.js"
+import {CANDIDATE_WINDOW_SIZE} from "../constants/feed.js"
+import {buildRankedFeed} from "../helpers/FeedDiversity.js"
+import { Prisma } from "@prisma/client";
 
 export async function followSource(userId,sourceId){
     try{
@@ -36,13 +39,17 @@ export async function followSource(userId,sourceId){
 export async function unfollowSource(userId, sourceId) {
     try
     {
-        return prisma.userSourceFollow.delete({
+        return await prisma.userSourceFollow.delete({
         where: {
             userId_sourceId: {
                 userId,
                 sourceId,
             },
+            
         },
+        include:{
+                source:true,
+            }
     });
     }
     catch (error) {
@@ -75,3 +82,55 @@ export async function getFollowedSources(userId) {
         followedAt: follow.createdAt,
     }));
 }
+
+
+
+export async function getFollowingFeed({userId}) {
+
+ 
+    const follows =  await prisma.userSourceFollow.findMany({
+        where:{
+            userId,
+        },
+        select:{
+            sourceId:true,
+        },
+        
+    });
+
+    const sourceIds = follows.map( follow=>follow.sourceId );
+    
+    if (sourceIds.length === 0) {
+        return [];
+    }
+
+    const candidates = await prisma.article.findMany({
+            where: {
+                topicsClassified: true,
+                sourceId: {
+                    in: sourceIds,
+                },
+            },
+            include: {
+                articleTopics: {
+                    include: {
+                        topic: true,
+                    },
+                },
+                source: true,
+            },
+            orderBy: {
+                publishedAt: "desc",
+            },
+            take: CANDIDATE_WINDOW_SIZE,
+        });
+
+    const rankedFeed = buildRankedFeed(candidates,{});
+
+
+    return rankedFeed;
+
+
+  }
+  
+ 

@@ -10,6 +10,8 @@ import {
   getIndia,
 }
   from "../controllers/feedController.js";
+import resolveCurrentUser from "../middleware/currentUser.js";
+import { getFollowingFeedController } from "../controllers/followController.js";
 
 const router = express.Router();
 
@@ -29,6 +31,14 @@ router.get(
   "/india",
   requireAuth,
   getIndia
+);
+
+router.get(
+  "/following",
+  requireAuth,
+  resolveCurrentUser,
+  getFollowingFeedController
+
 );
 
 export default router;

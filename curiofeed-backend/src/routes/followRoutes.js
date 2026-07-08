@@ -8,18 +8,20 @@ const router =   express.Router();
 
 
 router.post(
-    ":sourceId/follow",
+    "/:sourceId/follow",
     requireAuth,
     resolveCurrentUser,
     followSourceController
 );
 
 router.delete(
-    ":sourceId/follow",
+    "/:sourceId/follow",
     requireAuth,
     resolveCurrentUser,
     unfollowSourceController
 );
+
+
 
 
 

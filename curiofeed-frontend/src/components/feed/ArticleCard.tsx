@@ -1,47 +1,80 @@
 import Link from "next/link";
 
-import { FeedArticle } from "@/types/feed";
-
 import TopicBadge from "./TopicBadge";
 import SourceBadge from "./SourceBadge";
-import {formatRelativeTime} from "../../utils/date"
-
-interface ArticleCardProps {
-  article: FeedArticle;
-}
+import { formatRelativeTime } from "../../utils/date";
+import { ArticleCardProps } from "@/types/feed";
+import { isPageStatic } from "next/dist/build/utils";
 
 export default function ArticleCard({
   article,
+  isFollowing,
+  onFollow,
+  onUnfollow,
+  isPending,
 }: ArticleCardProps) {
+  const handleFollowClick = () => {
+    console.log("clicked");
+  if (isFollowing) {
+    console.log("calling unfollow");
+    onUnfollow(article.source.id);
+  } else {
+    console.log("calling follow");
+    onFollow(article.source.id);
+  }
+};
+
   return (
-    <Link href={article.url} target="_blank">
+    <article
+      className="
+        group
+        rounded-2xl
+        border
+        border-gray-200
+        bg-white
+        p-5
+        transition-all
+        duration-200
+        hover:border-gray-300
+        hover:shadow-sm
+      "
+    >
+      {/* Header */}
 
-      <article
-        className="
-          group
-          rounded-2xl
-          border
-          border-gray-200
-          bg-white
-          p-5
-          transition-all
-          duration-200
-          hover:border-gray-300
-          hover:shadow-sm
-        "
+      <div className="mb-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+        <SourceBadge source={article.source.name} />
+
+        <button
+          type="button"
+          disabled = {isPending}
+          onClick={handleFollowClick}
+          className={`
+                rounded-md px-3 py-1 text-sm font-medium transition
+                ${isPending ? "opacity-50 cursor-not-allowed" : ""}
+                ${
+                    isFollowing
+                        ? "border border-gray-300 bg-gray-100 text-gray-700"
+                        : "bg-black text-white"
+                }
+            `}
+        >
+          {isPending  ? "Loading..." : isFollowing ? "Following" : "Follow"} 
+        </button>
+      </div>
+
+        <span className="text-sm text-gray-500">
+          {formatRelativeTime(article.publishedAt)}
+        </span>
+      </div>
+
+      {/* Everything below opens the article */}
+
+      <Link
+        href={article.url}
+        target="_blank"
+        className="block"
       >
-        {/* Header */}
-
-        <div className="mb-5 flex items-center justify-between">
-
-          <SourceBadge source={article.source.name} />
-
-          <span className="text-sm text-gray-500">
-            {formatRelativeTime(article.publishedAt)}
-          </span>
-
-        </div>
-
         {/* Title */}
 
         <h2
@@ -77,14 +110,12 @@ export default function ArticleCard({
         {/* Topics */}
 
         <div className="mb-5 flex flex-wrap gap-2">
-
           {article.articleTopics.map(({ topic }) => (
             <TopicBadge
               key={topic.id}
-              topic={topic?.name}
+              topic={topic.name}
             />
           ))}
-
         </div>
 
         {/* Footer */}
@@ -100,9 +131,7 @@ export default function ArticleCard({
         >
           Read article →
         </span>
-
-      </article>
-
-    </Link>
+      </Link>
+    </article>
   );
 }

@@ -28,3 +28,21 @@ export interface FeedArticle {
     topic: FeedTopic;
   }[];
 }
+
+export interface FeedListProps {
+    articles: FeedArticle[];
+    isFollowing: (sourceId: string) => boolean;
+    onFollow: (sourceId: string) => void;
+    onUnfollow: (sourceId: string) => void;
+    isPending:(sourceId : string) => boolean,
+}
+
+
+export interface ArticleCardProps {
+  article: FeedArticle;
+  isFollowing:Boolean,
+  onFollow:(sourceId: string) => void,
+  onUnfollow:(sourceId: string) => void,
+  isPending:boolean,
+  
+}

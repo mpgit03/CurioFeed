@@ -8,13 +8,13 @@ import ErrorFeed from "@/components/feed/ErrorFeed";
 import {useArticles} from "@/hooks/useArticles";
 import Pagination from "@/components/feed/Pagination"
 import {PAGE_SIZE} from "@/constants/feed"
+import { useFollowedSources } from "@/hooks/useFollowedSources";
 
 
 
 
 
 export default function MyFeedPage() {
-const PAGE_SIZE = 20;
 
 const {
         articles,
@@ -25,6 +25,20 @@ const {
         setPage,
         hasMore,
     } = useArticles("/api/v1/feed/explore");
+
+const {
+    loading:sourcesLoading,
+    error:sourceError,
+    followedSourceIds,
+    isFollowing,
+    followSource,
+    unfollowSource,
+    isPending,
+
+
+} = useFollowedSources();
+
+
 
 const visibleArticles = articles.slice(
     (page - 1) * PAGE_SIZE,
@@ -40,13 +54,26 @@ if (error) {
 }
 
 if (articles.length === 0) {
-    return <EmptyFeed />;
+    return (
+  <EmptyFeed
+    title="No articles available"
+    description="There are no articles to explore right now. Please check back in a little while."
+    primaryAction={{
+      href: "/",
+      label: "Go to My Feed",
+    }}
+  />
+);
 }
 
 
 return (
     <>
-        <FeedList articles={visibleArticles} />
+        <FeedList articles={visibleArticles}
+                isFollowing={isFollowing}
+                onFollow={followSource}
+                onUnfollow={unfollowSource}
+                isPending = {isPending} />
 
         <Pagination
             page={page}

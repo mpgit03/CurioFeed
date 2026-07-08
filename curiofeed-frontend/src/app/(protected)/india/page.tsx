@@ -7,6 +7,7 @@ import EmptyFeed from "@/components/feed/EmptyFeed";
 import ErrorFeed from "@/components/feed/ErrorFeed";
 import { useArticles } from "@/hooks/useArticles";
 import { PAGE_SIZE } from "@/constants/feed";
+import { useFollowedSources } from "@/hooks/useFollowedSources";
 
 export default function IndiaPage() {
     const {
@@ -18,6 +19,18 @@ export default function IndiaPage() {
         setPage,
         hasMore,
     } = useArticles("/api/v1/feed/india");
+
+    const {
+        loading:sourcesLoading,
+        error:sourceError,
+        followedSourceIds,
+        isFollowing,
+        followSource,
+        unfollowSource,
+        isPending,
+    
+    
+    } = useFollowedSources();
 
     const visibleArticles = articles.slice(
         (page - 1) * PAGE_SIZE,
@@ -38,12 +51,25 @@ export default function IndiaPage() {
     }
 
     if (articles.length === 0) {
-        return <EmptyFeed />;
+        return (
+        <EmptyFeed
+            title="No India-related articles available"
+            description="We couldn't find any India-related articles at the moment."
+            primaryAction={{
+            href: "/explore",
+            label: "Explore Articles",
+            }}
+        />
+    );
     }
 
     return (
         <>
-            <FeedList articles={visibleArticles} />
+            <FeedList articles={visibleArticles}
+                    isFollowing={isFollowing}
+                    onFollow={followSource}
+                    onUnfollow={unfollowSource}
+                    isPending = {isPending} />
 
             <Pagination
                 page={page}
