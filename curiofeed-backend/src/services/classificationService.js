@@ -1,6 +1,15 @@
 
 
 import { GoogleGenAI } from "@google/genai";
+import prisma from "../lib/prisma.js";
+import { persistArticleTopics } from "./articletopicService.js";
+import {CLASSIFICATION_MODEL} from "../constants/classification.js";
+
+const HTTP_STATUS = {
+  TOO_MANY_REQUESTS: 429,
+  SERVICE_UNAVAILABLE: 503,
+};
+
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -29,7 +38,7 @@ export async function generateWithRetry(prompt) {
       console.log(`Attempt ${attempt}`);
 
       return await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: CLASSIFICATION_MODEL,
         contents: prompt,
       });
 
@@ -41,11 +50,12 @@ export async function generateWithRetry(prompt) {
         error.status
       );
 
-      if (
-        error.status !== 503 &&
-        error.status !== 429
-      ) {
-        throw error;
+      if (error.status === TOO_MANY_REQUESTS) {
+          throw error;
+      }
+
+      if (error.status !== SERVICE_UNAVAILABLE) {
+          throw error;
       }
 
       if (attempt < 5) {
@@ -149,6 +159,33 @@ ${JSON.stringify(articles)}
   const response = await generateWithRetry(prompt);
 
   return extractJson(response.text);
+}
+
+export async function classifyBatch(articleIds){
+  const articles = await prisma.article.findMany({
+    where:{
+      id:{
+        in:articleIds,
+      }
+    },
+    select:{
+      id:true,
+      title:true,
+      description:true,
+    },
+  });
+
+  const payload =
+    articles.map(article => ({
+      articleId: article.id,
+      title: article.title,
+      description: article.description,
+    }));
+
+  const classifications = await classifyArticles(payload);
+
+  return await persistArticleTopics(classifications);
+  
 }
 
 

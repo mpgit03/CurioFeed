@@ -3,9 +3,20 @@ import { fetchFeed } from "./rssService.js";
 
 const MAX_ARTICLE_AGE_DAYS = 90;
 
-export async function ingestSource(source) {
+export async function ingestSource(sourceId) {
+  const source = await prisma.source.findUnique({
+    where:{
+      id:sourceId,
+    },
+  });
+
+  if (!source) {
+      console.warn(`Source ${sourceId} not found. Skipping job.`);
+      return null;
+  }
+
   const articles = await fetchFeed(source.rssUrl);
-  // console.log(articles[0]);
+  
   
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - MAX_ARTICLE_AGE_DAYS);

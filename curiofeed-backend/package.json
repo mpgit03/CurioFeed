@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "workers:rss": "node src/workers/rss/rssWorker.js"
   },
   "keywords": [],
   "author": "",
@@ -16,14 +17,15 @@
     "@clerk/express": "^2.1.26",
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
-    "bullmq": "^5.78.0",
+    "bullmq": "^5.80.2",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "helmet": "^8.2.0",
+    "ioredis": "^5.11.1",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
-    "node-cron": "^4.2.1",
+    "node-cron": "^4.6.0",
     "pg": "^8.21.0",
     "prisma": "^6.19.3",
     "redis": "^6.0.0",

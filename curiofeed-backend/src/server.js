@@ -15,6 +15,7 @@ import followRoutes from "./routes/followRoutes.js"
 
 import { clerkMiddleware } from "@clerk/express";
 import { requireAuth } from "./middleware/authMiddleware.js";
+import { startSchedulers } from "./scheduler/index.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -93,7 +94,13 @@ app.use(
 app.use(
   "/api/v1/sources",
   followRoutes
-)
+);
+
+
+if(process.env.ENABLE_RSS_SCHEDULER === "true"){
+  startSchedulers();
+}
+
 
 
 app.listen(PORT, () => {

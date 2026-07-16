@@ -67,13 +67,13 @@ export async function persistArticleTopics(
   )
 );
 
-  console.log({
+/*   console.log({
   articleTopicRows:
     articleTopicRows.length,
 
   classifiedArticles:
     classifiedArticleIds.size,
-});
+}); */
 
   return {
     articleTopicsCreated:
