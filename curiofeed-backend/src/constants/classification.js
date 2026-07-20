@@ -12,4 +12,4 @@ export const CLASSIFICATION_JOB_ATTEMPTS = 5;
 
 export const CLASSIFICATION_JOB_BACKOFF_MS = 15000;
 
-export const CLASSIFICATION_CRON_SCHEDULE = "0 * * * *";
+export const CLASSIFICATION_CRON_SCHEDULE = "*/1 * * * *";

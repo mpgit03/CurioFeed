@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import redisConnection from "../config/redis.js";
+import redisConnection from "../../config/redis.js";
 import {  processClassificationJob } from "./processor.js";
 import classificationQueue from "../../queues/classificationQueue.js";
 

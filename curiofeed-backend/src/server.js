@@ -5,6 +5,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import logger from "./lib/logger.js"
+
 
 import webhookRoutes from "./routes/webhookRoutes.js";
 import userRoutes from "./routes/userRoutes.js"
@@ -15,10 +17,14 @@ import followRoutes from "./routes/followRoutes.js"
 
 import { clerkMiddleware } from "@clerk/express";
 import { requireAuth } from "./middleware/authMiddleware.js";
-import { startSchedulers } from "./scheduler/index.js";
+// import { startSchedulers } from "./scheduler/index.js";
+import { validateDependencies } from "./config/startup.js";
+
+
+
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT || 5000);
 
 
 app.use(morgan("dev"));
@@ -97,12 +103,29 @@ app.use(
 );
 
 
-if(process.env.ENABLE_RSS_SCHEDULER === "true"){
-  startSchedulers();
+async function startServer() {
+
+  await validateDependencies();
+
+  const { startSchedulers } = await import("./scheduler/index.js");
+
+  if (process.env.ENABLE_SCHEDULERS === "true") {
+    startSchedulers();
+  }
+
+  app.listen(PORT, () => {
+    logger.info(
+      {
+        port: PORT,
+        environment: process.env.NODE_ENV,
+      },
+      "Server started"
+    );
+  });
 }
 
-
-
-app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
+startServer().catch((err) => {
+  logger.fatal({ err }, "Startup failed");
+  process.exit(1);
 });
+

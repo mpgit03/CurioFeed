@@ -9,6 +9,9 @@ export async function scheduleIngestion() {
     const sources = await prisma.source.findMany({
         where:{
             isActive:true,
+        },
+        select: {
+            id: true,
         }
     });
 
@@ -21,6 +24,10 @@ export async function scheduleIngestion() {
     console.log({
         scheduled :sources.length,
     });
+
+    return {
+        scheduled: sources.length,
+    };
 
 
     

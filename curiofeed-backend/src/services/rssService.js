@@ -2,9 +2,9 @@ import Parser from "rss-parser";
 
 const parser = new Parser();
 
-export async function fetchFeed(rssUrl) {
+export async function fetchFeed(source) {
   try {
-    const feed = await parser.parseURL(rssUrl);
+    const feed = await parser.parseURL(source.rssUrl);
 
     return feed.items.map((item) => ({
       title: item.title ?? null,
@@ -34,7 +34,11 @@ export async function fetchFeed(rssUrl) {
     }));
   } catch (error) {
     throw new Error(
-      `Failed to fetch RSS feed: ${rssUrl}`
+    `RSS fetch failed.
+
+    Source : ${source.name}
+    URL    : ${source.rssUrl}
+    Reason : ${error.message}`
     );
   }
 }

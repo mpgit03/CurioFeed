@@ -1,9 +1,10 @@
 import prisma from "../lib/prisma.js";
 import { fetchFeed } from "./rssService.js";
 
-const MAX_ARTICLE_AGE_DAYS = 90;
+const MAX_ARTICLE_AGE_DAYS = 20;
 
 export async function ingestSource(sourceId) {
+  const startTime = Date.now();
   const source = await prisma.source.findUnique({
     where:{
       id:sourceId,
@@ -15,7 +16,7 @@ export async function ingestSource(sourceId) {
       return null;
   }
 
-  const articles = await fetchFeed(source.rssUrl);
+  const articles = await fetchFeed(source);
   
   
   const cutoffDate = new Date();
@@ -73,18 +74,19 @@ export async function ingestSource(sourceId) {
     });
     }
 
+    const skipped = articles.length - articleData.length;
+
 
     return {
-    source: source.name,
+      source: source.name,
 
-    fetched: articles.length,
-
-    recent: recentArticles.length,
-
-    existing: existingUrls.size,
-
-    inserted: articleData.length,
-    };
+      fetched: articles.length,
+      recent: recentArticles.length,
+      existing: existingUrls.size,
+      inserted: articleData.length,
+      skipped: articles.length - recentArticles.length,
+      duration: Date.now() - startTime,
+  };
 }
 
 

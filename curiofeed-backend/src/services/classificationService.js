@@ -4,6 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 import prisma from "../lib/prisma.js";
 import { persistArticleTopics } from "./articletopicService.js";
 import {CLASSIFICATION_MODEL} from "../constants/classification.js";
+import { validateClassificationResponse } from "../validators/classificaitonValidators.js";
 
 const HTTP_STATUS = {
   TOO_MANY_REQUESTS: 429,
@@ -50,11 +51,14 @@ export async function generateWithRetry(prompt) {
         error.status
       );
 
-      if (error.status === TOO_MANY_REQUESTS) {
+      if (error.status === HTTP_STATUS.TOO_MANY_REQUESTS) {
+        console.log(
+            "Quota exceeded. Handing retry over to BullMQ."
+        );
           throw error;
       }
 
-      if (error.status !== SERVICE_UNAVAILABLE) {
+      if (error.status !== HTTP_STATUS.SERVICE_UNAVAILABLE) {
           throw error;
       }
 
@@ -63,7 +67,7 @@ export async function generateWithRetry(prompt) {
           Math.pow(2, attempt) * 1000;
 
         console.log(
-          `Retrying in ${delay / 1000}s`
+            `Service unavailable. Retrying in ${delay / 1000}s...`
         );
 
         await new Promise(resolve =>
@@ -130,11 +134,38 @@ Set "isIndiaRelated" to false if:
 - The article is about a global topic without a primary focus on India.
 - The connection to India is weak or incidental.
 
-Return ONLY valid JSON.
+IMPORTANT:
 
-Do not include markdown.
-Do not wrap the response in triple backticks.
-Do not include explanations.
+Your response MUST be a single valid JSON array.
+
+The first character MUST be '['.
+The last character MUST be ']'.
+
+Do NOT return multiple JSON objects.
+Do NOT return newline-separated JSON objects.
+Do NOT include markdown.
+Do NOT include code fences.
+Do NOT include explanations.
+Do NOT include any text before or after the JSON.
+
+Every article MUST have at least one topic.
+
+Only use the allowed topic names.
+
+The response must exactly match this structure:
+
+[
+  {
+    "articleId": "string",
+    "topics": [
+      {
+        "topic": "Technology",
+        "confidence": 0.90
+      }
+    ],
+    "isIndiaRelated": false
+  }
+]
 
 Output format:
 
@@ -184,6 +215,11 @@ export async function classifyBatch(articleIds){
 
   const classifications = await classifyArticles(payload);
 
+  validateClassificationResponse(
+    articleIds,
+    classifications
+  );
+
   return await persistArticleTopics(classifications);
   
 }
@@ -204,98 +240,3 @@ export async function classifyBatch(articleIds){
 
 
 
-/* export function classifyArticle(article) {
-  const topics = new Set();
-
-  const text = [
-    article.title,
-    article.description,
-    ...(article.rawContent?.categories || []),
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-
-  // AI
-
-  if (
-    text.includes("ai") ||
-    text.includes("artificial intelligence") ||
-    text.includes("llm") ||
-    text.includes("gpt") ||
-    text.includes("agent")
-  ) {
-    topics.add("Artificial Intelligence");
-  }
-
-  // Programming
-
-  if (
-    text.includes("programming") ||
-    text.includes("developer") ||
-    text.includes("software") ||
-    text.includes("engineering") ||
-    text.includes("architecture")
-  ) {
-    topics.add("Programming");
-  }
-
-  // Science
-
-  if (
-    text.includes("research") ||
-    text.includes("science") ||
-    text.includes("biology") ||
-    text.includes("disease") ||
-    text.includes("medical")
-  ) {
-    topics.add("Science");
-  }
-
-  // Startups
-
-  if (
-    text.includes("startup") ||
-    text.includes("founder") ||
-    text.includes("venture") ||
-    text.includes("yc") ||
-    text.includes("funding")
-  ) {
-    topics.add("Startups");
-  }
-
-  // Business
-
-  if (
-    text.includes("business") ||
-    text.includes("market") ||
-    text.includes("revenue") ||
-    text.includes("growth")
-  ) {
-    topics.add("Business");
-  }
-
-  switch (article.source.category) {
-  case "AI":
-    topics.add("Artificial Intelligence");
-    break;
-
-  case "ENGINEERING":
-    topics.add("Programming");
-    break;
-
-  case "SCIENCE":
-    topics.add("Science");
-    break;
-
-  case "STARTUPS":
-    topics.add("Startups");
-    break;
-
-  case "BUSINESS":
-    topics.add("Business");
-    break;
-}
-
-  return [...topics];
-} */
