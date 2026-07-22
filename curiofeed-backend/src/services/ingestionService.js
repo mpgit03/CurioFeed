@@ -1,8 +1,7 @@
 import prisma from "../lib/prisma.js";
 import { fetchFeed } from "./rssService.js";
-
-const MAX_ARTICLE_AGE_DAYS = 20;
-
+import { serviceLogger } from "../lib/logger.js";
+import {MAX_ARTICLE_AGE_DAYS} from "../constants/rss.js"
 export async function ingestSource(sourceId) {
   const startTime = Date.now();
   const source = await prisma.source.findUnique({
@@ -12,7 +11,11 @@ export async function ingestSource(sourceId) {
   });
 
   if (!source) {
-      console.warn(`Source ${sourceId} not found. Skipping job.`);
+      serviceLogger.warn(
+      { sourceId },
+            "Source not found. Skipping ingestion"
+      );
+
       return null;
   }
 

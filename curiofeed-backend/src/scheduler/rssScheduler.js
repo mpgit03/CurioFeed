@@ -2,6 +2,7 @@ import prisma from "../lib/prisma.js";
 import cron from "node-cron";
 import { enqueueRssIngestion } from "../producers/rssProducer.js";
 import { RSS_CRON_SCHEDULE } from "../constants/rss.js";
+import { schedulerLogger } from "../lib/logger.js";
 
 
 export async function scheduleIngestion() {
@@ -21,9 +22,6 @@ export async function scheduleIngestion() {
         )
     );
 
-    console.log({
-        scheduled :sources.length,
-    });
 
     return {
         scheduled: sources.length,
@@ -39,11 +37,17 @@ export function startRSSScheduler() {
         try {
             const result = await scheduleIngestion();
 
-            console.log(
-                `Scheduled ${result.scheduled} RSS jobs`
+            schedulerLogger.info(
+                {
+                scheduledJobs: result.scheduled,
+                },
+                "RSS ingestion jobs scheduled"
             );
         } catch (error) {
-            console.error(error);
+            schedulerLogger.error(
+            { err: error },
+            "Failed to schedule RSS ingestion jobs"
+            );
         }
     });
 }

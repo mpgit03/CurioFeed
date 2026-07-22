@@ -5,9 +5,9 @@ import { requireAuth }
   from "../middleware/authMiddleware.js";
 
 import {
-  getExplore,
+  getExploreFeedController,
   getFeedController,
-  getIndia,
+  getIndiaFeedController,
 }
   from "../controllers/feedController.js";
 import resolveCurrentUser from "../middleware/currentUser.js";
@@ -24,13 +24,13 @@ router.get(
 router.get(
   "/explore",
   requireAuth,
-  getExplore
+  getExploreFeedController
 );
 
 router.get(
   "/india",
   requireAuth,
-  getIndia
+  getIndiaFeedController
 );
 
 router.get(

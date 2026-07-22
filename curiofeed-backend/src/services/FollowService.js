@@ -2,6 +2,7 @@ import prisma from "../lib/prisma.js"
 import {CANDIDATE_WINDOW_SIZE} from "../constants/feed.js"
 import {buildRankedFeed} from "../helpers/FeedDiversity.js"
 import { Prisma } from "@prisma/client";
+import { ApiError } from "../utils/ApiError.js";
 
 export async function followSource(userId,sourceId){
     try{
@@ -12,12 +13,12 @@ export async function followSource(userId,sourceId){
             }
         })
 
-        if(!source){ throw new Error("Source not Found");  }
+        if(!source){ throw new ApiError(404,"Source not Found");  }
 
         return await prisma.userSourceFollow.create({
         data:{
             userId,
-            sourceId,
+            sourceId,   
         },
         include:{
             source:true,
@@ -28,7 +29,7 @@ export async function followSource(userId,sourceId){
             error instanceof Prisma.PrismaClientKnownRequestError &&
             error.code === "P2002"
         ) {
-            throw new Error("You already follow this source.");
+            throw new ApiError(409,"You already follow this source.");
         }
 
         throw error;
@@ -57,7 +58,7 @@ export async function unfollowSource(userId, sourceId) {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
     ) {
-        throw new Error("You are not following this source.");
+        throw new ApiError(404,"You are not following this source.");
     }
 
     throw error;

@@ -2,6 +2,7 @@ import { Worker } from "bullmq";
 import redisConnection from "../../config/redis.js";
 import {  processRSSJob } from "./processor.js";
 import rssQueue from "../../queues/rssQueue.js";
+import { rssWorkerLogger } from "../../lib/logger.js";
 
 
 const worker = new Worker(
@@ -13,11 +14,21 @@ const worker = new Worker(
 );
 
 worker.on("completed", (job) => {
-  console.log(`✅ Job ${job.id} completed`);
+  rssWorkerLogger.info(
+    {
+      jobId: job.id,
+    },
+    "RSS ingestion job completed"
+  );
 });
 
 worker.on("failed", (job, err) => {
-  console.error(`❌ Job ${job?.id} failed`);
-  console.error(err);
+  rssWorkerLogger.error(
+    {
+      jobId: job?.id,
+      err,
+    },
+    "RSS ingestion job failed"
+  );
 });
 

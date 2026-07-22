@@ -1,17 +1,14 @@
 // controllers/feedController.js
 
+import { ApiError } from "../utils/ApiError.js"
 import prisma from "../lib/prisma.js";
 import { getExploreFeed } from "../services/exploreService.js";
 import { getFeed } from "../services/feedService.js";
 import { getIndiaFeed } from "../services/indiaService.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 
 
-export async function getFeedController(
-  req,
-  res
-) {
-
-  try{
+export const getFeedController = asyncHandler( async(req,res) =>{
     const user = await prisma.user.findUnique({
         where:{
             clerkId:req.userId,
@@ -19,7 +16,7 @@ export async function getFeedController(
     });
 
    if(!user){
-    throw new Error("User does not exist");
+    throw new ApiError(404,"User does not exist");
    }
 
    const page =
@@ -42,52 +39,28 @@ export async function getFeedController(
         success: true,
         feed,
     });
-    }
-  catch(error){
-        res.status(404).json({
-            success:false,
-            message:error.message,
-        });
-    }
+    
+})
 
 
 
-   
-}
-
-export async function getExplore(req,res) {
-    try{
+export const getExploreFeedController = asyncHandler( async(req,res) => {
+    
         const rankedArticles = await getExploreFeed({});
         
         res.json({
             success:true,
             feed:rankedArticles
         });
-    }catch(error){
-        console.log(error);
-
-        res.status(500).json({
-            success:false,
-            message:"Failed to load explore feed",
-        });
-        
-    }
     
-}
+});
 
-export async function getIndia(req,res){
-        try{
+export const getIndiaFeedController = asyncHandler ( async(req,res) =>{
             const rankedArticles = await getIndiaFeed({});
             
             res.status(200).json({
                 success:true,
                 feed:rankedArticles,
             });
-        }catch(error){
-            console.log(error);
-            res.status(500).json({
-            success:false,
-            message:"Failed to load india feed",
-        });
-        }
-}
+        
+});

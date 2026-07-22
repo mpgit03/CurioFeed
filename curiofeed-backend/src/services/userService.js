@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma.js";
+import { ApiError } from "../utils/ApiError.js";
 
 export const updateUserPreferences =
 async (clerkId, topicIds) => {
@@ -11,7 +12,7 @@ const user =
   });
 
 if (!user) {
-  throw new Error(
+  throw new ApiError(404,
     "User not found"
   );
 }

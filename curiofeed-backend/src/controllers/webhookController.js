@@ -3,6 +3,7 @@ import {
   syncUser,
   deleteUser,
 } from "../services/userSyncService.js";
+import { ApiError } from "../utils/ApiError.js";
 
 export const clerkWebhookHandler =
   async (req, res) => {
@@ -11,7 +12,7 @@ export const clerkWebhookHandler =
         process.env.CLERK_WEBHOOK_SECRET;
 
       if (!webhookSecret) {
-        throw new Error(
+        throw new Api(404,
           "Missing Clerk webhook secret"
         );
       }

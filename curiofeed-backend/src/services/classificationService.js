@@ -2,6 +2,7 @@
 
 import { GoogleGenAI } from "@google/genai";
 import prisma from "../lib/prisma.js";
+import { serviceLogger } from "../lib/logger.js";
 import { persistArticleTopics } from "./articletopicService.js";
 import {CLASSIFICATION_MODEL} from "../constants/classification.js";
 import { validateClassificationResponse } from "../validators/classificaitonValidators.js";
@@ -25,8 +26,13 @@ export function extractJson(responseText) {
 
     return JSON.parse(cleaned);
   } catch (error) {
-    console.log("Failed to parse Gemini response:");
-    console.log(responseText);
+      serviceLogger.error(
+    {
+      err: error,
+      response: responseText,
+    },
+    "Failed to parse Gemini response"
+  );
     throw error;
   }
 }
@@ -46,15 +52,22 @@ export async function generateWithRetry(prompt) {
     } catch (error) {
       lastError = error;
 
-      console.log(
-        `Attempt ${attempt} failed`,
-        error.status
-      );
+      serviceLogger.warn(
+      {
+        attempt,
+        status: error.status,
+        err: error,
+      },
+      "Gemini request failed"
+    );
 
       if (error.status === HTTP_STATUS.TOO_MANY_REQUESTS) {
-        console.log(
-            "Quota exceeded. Handing retry over to BullMQ."
-        );
+        serviceLogger.warn(
+        {
+          attempt,
+        },
+        "Gemini quota exceeded. Delegating retries to BullMQ"
+      );
           throw error;
       }
 
@@ -66,9 +79,13 @@ export async function generateWithRetry(prompt) {
         const delay =
           Math.pow(2, attempt) * 1000;
 
-        console.log(
-            `Service unavailable. Retrying in ${delay / 1000}s...`
-        );
+        serviceLogger.warn(
+        {
+          attempt,
+          retryInSeconds: delay / 1000,
+        },
+        "Gemini service unavailable. Retrying"
+      );
 
         await new Promise(resolve =>
           setTimeout(resolve, delay)
@@ -76,6 +93,16 @@ export async function generateWithRetry(prompt) {
       }
     }
   }
+
+      serviceLogger.error(
+      {
+        attempts: 5,
+        err: lastError,
+      },
+      "Gemini request failed after all retries"
+    );
+
+    throw lastError;
 
   throw lastError;
 }
@@ -193,7 +220,8 @@ ${JSON.stringify(articles)}
 }
 
 export async function classifyBatch(articleIds){
-  const articles = await prisma.article.findMany({
+  try{
+    const articles = await prisma.article.findMany({
     where:{
       id:{
         in:articleIds,
@@ -221,6 +249,17 @@ export async function classifyBatch(articleIds){
   );
 
   return await persistArticleTopics(classifications);
+  }catch (err) {
+    serviceLogger.error(
+      {
+        articleCount: articleIds.length,
+        err,
+      },
+      "Classification batch failed"
+    );
+
+    throw err;
+  }
   
 }
 

@@ -1,4 +1,6 @@
 import Parser from "rss-parser";
+import {ApiError} from "../utils/ApiError.js"
+import { serviceLogger } from "../lib/logger.js";
 
 const parser = new Parser();
 
@@ -33,12 +35,18 @@ export async function fetchFeed(source) {
       rawContent: item,
     }));
   } catch (error) {
-    throw new Error(
-    `RSS fetch failed.
 
-    Source : ${source.name}
-    URL    : ${source.rssUrl}
-    Reason : ${error.message}`
-    );
-  }
+    serviceLogger.error({
+        sourceId: source.id,
+        source: source.name,
+        rssUrl: source.rssUrl,
+        err: error,
+    }, "RSS fetch failed");
+
+
+      throw new ApiError(
+          502,
+          `Failed to fetch RSS feed for '${source.name}'.`
+      );
+}
 }

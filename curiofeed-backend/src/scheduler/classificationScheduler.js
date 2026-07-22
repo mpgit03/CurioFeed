@@ -2,6 +2,7 @@ import prisma from "../lib/prisma.js";
 import { enqueueClassification } from "../producers/classificationProducer.js";
 import { chunk } from "../utils/chunk.js";
 import cron from "node-cron";
+import { schedulerLogger } from "../lib/logger.js";
 
 import {
   CLASSIFICATION_BATCH_SIZE,
@@ -58,11 +59,17 @@ export function startClassificationScheduler() {
         try {
             const result = await scheduleClassification();
 
-            console.log(
-                `Scheduled ${result.scheduled} classification jobs`
-            );
+            schedulerLogger.info(
+            {
+              scheduledJobs: result.scheduled,
+            },
+            "Classification jobs scheduled"
+          );
         } catch (error) {
-            console.error(error);
+            schedulerLogger.error(
+          { err: error },
+          "Failed to schedule classification jobs"
+        );
         }
     });
 }

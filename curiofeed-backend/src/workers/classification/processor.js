@@ -1,3 +1,4 @@
+import { classificationProcessorLogger } from "../../lib/logger.js";
 import { classifyBatch } from "../../services/classificationService.js";
 
 export async function processClassificationJob(job) {
@@ -7,7 +8,13 @@ export async function processClassificationJob(job) {
 
   const result = await classifyBatch(articleIds);
 
-  console.log(
-    `✅ Article Topics: ${result.articleTopicsCreated} | Classified: ${result.articlesClassified} | ${Date.now() - start}ms`
-  );
+  classificationProcessorLogger.info(
+  {
+    articleCount: articleIds.length,
+    articleTopicsCreated: result.articleTopicsCreated,
+    articlesClassified: result.articlesClassified,
+    duration: Date.now() - start,
+  },
+  "Classification batch processed"
+);
 }

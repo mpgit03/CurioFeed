@@ -1,13 +1,15 @@
 import prisma from "../lib/prisma.js";
+import { serviceLogger } from "../lib/logger.js";
 
 export async function getFeed({
   userId,
   page = 1,
   limit = 20,
-  cursor=null
+  
 }) {
 
-  const userPreferences =
+  try{
+    const userPreferences =
     await prisma.userPreference.findMany({
       where: {
         userId,
@@ -17,19 +19,19 @@ export async function getFeed({
       },
     });
 
-    console.log({
+    /* console.log({
     userId,
     userPreferencesCount:
         userPreferences.length,
-    });
+    }); */
 
-    console.log(
+   /*  console.log(
   userPreferences.map(
     p => ({
       topicId: p.topicId,
     })
   )
-);
+); */
 
   if (userPreferences.length === 0) {
     return [];
@@ -42,10 +44,10 @@ export async function getFeed({
       )
     );
 
-    console.log({
+   /*  console.log({
   preferredTopicIds:
     [...preferredTopicIds],
-});
+}); */
 
   const articles =
     await prisma.article.findMany({
@@ -82,10 +84,10 @@ export async function getFeed({
       },
     });
 
-    console.log({
+  /*   console.log({
   articlesFound:
     articles.length,
-});
+}); */
 
   const feed = [];
 
@@ -159,4 +161,20 @@ export async function getFeed({
       skip,
       skip + limit
   );
+
+  } catch (err) {
+    serviceLogger.error(
+        {
+            userId,
+            page,
+            limit,
+            err,
+        },
+        "Failed to generate personalized feed"
+    );
+
+    throw err;
+}
+
+  
 }

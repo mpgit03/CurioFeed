@@ -19,6 +19,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { requireAuth } from "./middleware/authMiddleware.js";
 // import { startSchedulers } from "./scheduler/index.js";
 import { validateDependencies } from "./config/startup.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 
 
@@ -101,6 +102,9 @@ app.use(
   "/api/v1/sources",
   followRoutes
 );
+
+
+app.use(errorHandler);
 
 
 async function startServer() {

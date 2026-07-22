@@ -1,6 +1,7 @@
 
 
     import { ingestSource } from "../../services/ingestionService.js";
+    import { rssProcessorLogger } from "../../lib/logger.js";
 
     export async function processRSSJob(job) {
         const start = Date.now();
@@ -9,7 +10,13 @@
 
         const result = await ingestSource(sourceId);
 
-        console.log(
-            `✅ ${result.source} | Inserted: ${result.inserted} | ${Date.now()-start}ms`
+        rssProcessorLogger.info(
+        {
+            sourceId,
+            source: result.source,
+            inserted: result.inserted,
+            duration: Date.now() - start,
+        },
+        "RSS source processed"
         );
     }
