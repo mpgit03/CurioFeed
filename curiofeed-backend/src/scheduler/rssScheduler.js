@@ -33,7 +33,7 @@ export async function scheduleIngestion() {
 
 
 export function startRSSScheduler() {
-    cron.schedule(RSS_CRON_SCHEDULE, async () => {
+    const task = cron.schedule(RSS_CRON_SCHEDULE, async () => {
         try {
             const result = await scheduleIngestion();
 
@@ -43,6 +43,7 @@ export function startRSSScheduler() {
                 },
                 "RSS ingestion jobs scheduled"
             );
+            return task;
         } catch (error) {
             schedulerLogger.error(
             { err: error },
@@ -50,4 +51,6 @@ export function startRSSScheduler() {
             );
         }
     });
+
+    return task;
 }

@@ -1,11 +1,14 @@
+
+import prisma from "../../lib/prisma.js";
 import { Worker } from "bullmq";
 import redisConnection from "../../config/redis.js";
 import {  processClassificationJob } from "./processor.js";
 import classificationQueue from "../../queues/classificationQueue.js";
 import { classificationWorkerLogger } from "../../lib/logger.js";
+import { registerWorkerShutdown } from "../../lib/shutdownWorker.js";
 
 
-  const worker = new Worker(
+  export const classificationWorker = new Worker(
       classificationQueue.name,
       processClassificationJob,
       {
@@ -15,7 +18,7 @@ import { classificationWorkerLogger } from "../../lib/logger.js";
 
  
 
-  worker.on("failed", (job, err) => {
+  classificationWorker.on("failed", (job, err) => {
   classificationWorkerLogger.error(
     {
       jobId: job?.id,
@@ -25,9 +28,20 @@ import { classificationWorkerLogger } from "../../lib/logger.js";
   );
 });
 
-  worker.on("error", (err) => {
+  classificationWorker.on("error", (err) => {
   classificationWorkerLogger.fatal(
     { err },
     "Classification worker crashed"
   );
 });
+
+
+registerWorkerShutdown({
+    workerName: "Classification",
+    worker: classificationWorker,
+    logger: classificationWorkerLogger,
+    prisma,
+    redis: redisConnection,
+});
+
+

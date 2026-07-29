@@ -1,11 +1,13 @@
 import { getArticles , getArticleRedirectUrl , getArticleById} from "../services/articleService.js";
-import prisma from "../lib/prisma.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
+import { serviceLogger } from "../lib/logger.js";
 
-export async function getArticlesController(req, res, next) {
-    try {
-        const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 10;
 
+
+export const  getArticlesController = asyncHandler( async(req, res) => {
+    
+        const { page , limit } = req.validated.query;
+        console.log(req.validated);
         const result = await getArticles({
             page,
             limit,
@@ -15,35 +17,31 @@ export async function getArticlesController(req, res, next) {
         data: result,
         });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-};
+});
 
-export async function getArticleByIdController(req, res, next) {
-    try {
-        const articleId = req.params.id;    
+
+export const getArticleByIdController = asyncHandler( async(req, res) => {
+   
+        const {articleId} = req.validated.params; 
+        console.log(req.validated);   
         
         const article = await getArticleById(articleId);
         return res.status(200).json({
             success: true,
             data: article,
         });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-};   
+   
+});
 
-export async function openArticleController(req, res, next) {
-    try {
-        const articleId = req.params.id;
-        console.log(`Redirecting article ID: ${articleId}`);
+
+export const openArticleController = asyncHandler( async(req, res) => {
+    
+        const {articleId} = req.validated.params;
         const redirectUrl = await getArticleRedirectUrl(articleId);
         res.redirect(302, redirectUrl);
-    } catch (error) {
-        console.error(error);
-        res.status(404).json({ error: "Article not found" });
-    }
-};
+    
+});
+
+
+
+

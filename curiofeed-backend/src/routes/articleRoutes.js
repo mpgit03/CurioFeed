@@ -1,19 +1,24 @@
 import express from 'express';
+import { validate } from '../middleware/validate.js';
+import { getArticleByIdSchema,getarticleSchema } from '../validators/articleValidator.js';
 import { getArticlesController , openArticleController , getArticleByIdController} from '../controllers/articleController.js';
 const router = express.Router();
 
 router.get(
     '/',
+    validate(getarticleSchema),
     getArticlesController,
 );
 
 router.get(
-    '/:id',
+    '/:articleId',
+    validate(getArticleByIdSchema),
     getArticleByIdController,
 );
 
 router.get(
-    '/:id/open',
+    '/:articleId/open',
+    validate(getArticleByIdSchema),
     openArticleController,
 );
 

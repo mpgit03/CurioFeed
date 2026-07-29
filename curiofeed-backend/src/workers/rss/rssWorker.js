@@ -1,11 +1,13 @@
+import prisma from "../../lib/prisma.js";
 import { Worker } from "bullmq";
 import redisConnection from "../../config/redis.js";
 import {  processRSSJob } from "./processor.js";
 import rssQueue from "../../queues/rssQueue.js";
 import { rssWorkerLogger } from "../../lib/logger.js";
+import { registerWorkerShutdown } from "../../lib/shutdownWorker.js";
 
 
-const worker = new Worker(
+export const rssWorker = new Worker(
     rssQueue.name,
     processRSSJob,
     {
@@ -13,7 +15,7 @@ const worker = new Worker(
     }
 );
 
-worker.on("completed", (job) => {
+rssWorker.on("completed", (job) => {
   rssWorkerLogger.info(
     {
       jobId: job.id,
@@ -22,7 +24,7 @@ worker.on("completed", (job) => {
   );
 });
 
-worker.on("failed", (job, err) => {
+rssWorker.on("failed", (job, err) => {
   rssWorkerLogger.error(
     {
       jobId: job?.id,
@@ -32,3 +34,12 @@ worker.on("failed", (job, err) => {
   );
 });
 
+
+
+registerWorkerShutdown({
+    workerName: "RSS",
+    worker: rssWorker,
+    logger: rssWorkerLogger,
+    prisma,
+    redis: redisConnection,
+});

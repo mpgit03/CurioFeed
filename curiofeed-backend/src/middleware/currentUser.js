@@ -4,7 +4,7 @@ import { asyncHandler } from "./asyncHandler.js";
 
 
 
-export default resolveCurrentUser = asyncHandler( async(req,res,next) =>{
+const resolveCurrentUser = asyncHandler( async(req,res,next) =>{
     const user = await prisma.user.findUnique({
             where:{
                 clerkId:req.userId,
@@ -17,4 +17,6 @@ export default resolveCurrentUser = asyncHandler( async(req,res,next) =>{
 
         req.user = user;
         next();
-})
+});
+
+export default resolveCurrentUser;

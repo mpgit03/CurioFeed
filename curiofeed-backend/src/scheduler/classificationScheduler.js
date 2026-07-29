@@ -55,7 +55,7 @@ export async function scheduleClassification() {
 
 
 export function startClassificationScheduler() {
-    cron.schedule(CLASSIFICATION_CRON_SCHEDULE, async () => {
+    const task = cron.schedule(CLASSIFICATION_CRON_SCHEDULE, async () => {
         try {
             const result = await scheduleClassification();
 
@@ -65,6 +65,8 @@ export function startClassificationScheduler() {
             },
             "Classification jobs scheduled"
           );
+
+          return task;
         } catch (error) {
             schedulerLogger.error(
           { err: error },
@@ -72,4 +74,6 @@ export function startClassificationScheduler() {
         );
         }
     });
+
+    return task;
 }

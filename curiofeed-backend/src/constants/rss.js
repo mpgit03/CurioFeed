@@ -2,4 +2,4 @@
 
 export const RSS_CRON_SCHEDULE = "*/15 * * * *";
 
-const MAX_ARTICLE_AGE_DAYS = 20;
+export const MAX_ARTICLE_AGE_DAYS = 20;

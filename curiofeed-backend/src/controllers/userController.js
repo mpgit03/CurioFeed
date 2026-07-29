@@ -1,16 +1,10 @@
 import { updatePreferencesSchema } from "../validators/userValidator.js";
-
 import { updateUserPreferences,} from "../services/userService.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 
-export const updatePreferences =
-async (req, res) => {
-   
-try {
+export const updatePreferences = asyncHandler( async (req, res) => {
 
-
-  const validatedData =
-    updatePreferencesSchema
-      .parse(req.body);
+  const {topicIds} = req.validated.body;
 
   const clerkId = req.userId;
 
@@ -26,13 +20,5 @@ try {
         "Preferences updated successfully",
     });
 
-} catch (error) {
-
-  return res.status(400)
-    .json({
-      success: false,
-      message:
-        error.message,
-    });
-}
 }   
+)

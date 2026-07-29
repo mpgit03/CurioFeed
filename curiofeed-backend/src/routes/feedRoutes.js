@@ -3,6 +3,8 @@ import express from "express";
 
 import { requireAuth }
   from "../middleware/authMiddleware.js";
+import { validate } from "../middleware/validate.js";
+import { getFollowingFeedSchema } from "../validators/follow.validator.js";
 
 import {
   getExploreFeedController,
@@ -12,7 +14,6 @@ import {
   from "../controllers/feedController.js";
 import resolveCurrentUser from "../middleware/currentUser.js";
 import { getFollowingFeedController } from "../controllers/followController.js";
-
 const router = express.Router();
 
 router.get(
@@ -37,6 +38,7 @@ router.get(
   "/following",
   requireAuth,
   resolveCurrentUser,
+  validate(getFollowingFeedSchema),
   getFollowingFeedController
 
 );

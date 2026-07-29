@@ -5,6 +5,13 @@ import { schedulerLogger } from "../lib/logger.js";
 export function startSchedulers() {
     schedulerLogger.info("Starting schedulers");
 
-    startRSSScheduler();
-    startClassificationScheduler();
+    const rssTask = startRSSScheduler();
+    const classificationTask = startClassificationScheduler();
+
+    return {
+    stop() {
+        rssTask.stop();
+        classificationTask.stop();
+    }
+    };
 }
