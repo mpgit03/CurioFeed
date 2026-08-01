@@ -2,17 +2,17 @@ import {z} from "zod";
 
 export const followschema = z.object({
     params: z.object({
-        sourceId:z.cuid(),
+        sourceId: z.cuid(),
     }),
-    params: z.object({}),
+    query: z.object({}),
     body: z.object({}),
 });
 
 export const unfollowSchema = z.object({
     params: z.object({
-        sourceId:z.cuid(),
+        sourceId: z.cuid(),
     }),
-    params: z.object({}),
+    query: z.object({}),
     body: z.object({}),
 });
 

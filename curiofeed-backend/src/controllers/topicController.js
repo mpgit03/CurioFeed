@@ -1,8 +1,7 @@
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import { getTopics } from "../services/topicService.js";
 
-export const getAllTopics =
-  async (req, res) => {
-    try {
+export const getAllTopics = asyncHandler( async (req, res) => {
 
       const topics =
         await getTopics();
@@ -11,14 +10,7 @@ export const getAllTopics =
         success: true,
         data: topics,
       });
-
-    } catch (error) {
-
-      return res.status(500)
-        .json({
-          success: false,
-          message:
-            error.message,
-        });
     }
-  };
+
+);
+  

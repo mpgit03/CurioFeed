@@ -14,11 +14,19 @@ import {
   from "../controllers/feedController.js";
 import resolveCurrentUser from "../middleware/currentUser.js";
 import { getFollowingFeedController } from "../controllers/followController.js";
+import { readLimiter } from "../middleware/rateLimiters.js";
+import { getFeedSchema } from "../validators/feed.validator.js";
+
 const router = express.Router();
+
+router.use(readLimiter);
+
+
 
 router.get(
   "/",
   requireAuth,
+  validate(getFeedSchema),
   getFeedController
 );
 

@@ -1,0 +1,25 @@
+openapi: 3.0.3
+
+info:
+  title: CurioFeed API
+  description: |
+    CurioFeed is a personalized news aggregation platform that
+    collects articles from RSS sources and delivers customized
+    feeds based on user interests.
+
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Development Server
+
+tags:
+  - name: Articles
+  - name: Feed
+  - name: Topics
+  - name: Users
+  - name: Sources
+  - name: Health
+  - name: Webhooks
+
+paths: {}   

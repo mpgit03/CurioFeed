@@ -11,6 +11,8 @@ const redisConnection = new IORedis({
   lazyConnect: true,
 });
 
-redisConnection.on("error", () => {});
+redisConnection.on("error", (err) => {
+    redisLogger.error({ err }, "Redis connection error");
+});
 
 export default redisConnection;

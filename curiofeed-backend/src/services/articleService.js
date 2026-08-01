@@ -37,7 +37,7 @@ export async function getArticles({
 
         source: article.source,
 
-        openUrl:`/api/articles/${article.id}/open`,
+        openUrl:`/api/v1/articles/${article.id}/open`,
         }));
 
         return {

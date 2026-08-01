@@ -12,9 +12,10 @@ export const clerkWebhookHandler =
         process.env.CLERK_WEBHOOK_SECRET;
 
       if (!webhookSecret) {
-        throw new Api(404,
-          "Missing Clerk webhook secret"
-        );
+        throw new ApiError(
+        500,
+        "Missing Clerk webhook secret"
+    );
       }
 
       const headers = req.headers;

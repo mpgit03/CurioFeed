@@ -1,6 +1,8 @@
   import dotenv from "dotenv";
   dotenv.config();
   
+  import swaggerUi from "swagger-ui-express";
+  import swaggerDocument from "./docs/swagger.js";
   import express from "express";
   import cors from "cors";
   import helmet from "helmet";
@@ -8,9 +10,10 @@
   import logger from "./lib/logger.js";
   import redisConnection from "./config/redis.js";
   import prisma from "./lib/prisma.js";
+  import apiLimiter from "./middleware/rateLimiters.js";
 
 
-
+  import healthRoutes from "./routes/healthRoutes.js";
   import webhookRoutes from "./routes/webhookRoutes.js";
   import userRoutes from "./routes/userRoutes.js"
   import topicRoutes from "./routes/topicRoutes.js";
@@ -54,6 +57,15 @@
   );
 
   app.use(helmet());
+
+  app.use(healthRoutes);
+
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument)
+);
+
 
 
 

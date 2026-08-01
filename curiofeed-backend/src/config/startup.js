@@ -13,13 +13,16 @@ export async function validateDependencies() {
   startupLogger.info("PostgreSQL connected");
 
   try {
-  await redisConnection.connect();
-  await redisConnection.ping();
+ if (redisConnection.status === "wait") {
+    await redisConnection.connect();
+}
+
+await redisConnection.ping();
 
   startupLogger.info("Redis connected");
   } catch (err) {
-    startupLogger.fatal("Redis is not running. Please start Redis.");
-    process.exit(1);
+    startupLogger.fatal({ err }, "Redis connection failed");
+  process.exit(1);
   }
 
   startupLogger.info("Startup validation complete");

@@ -7,7 +7,7 @@ import { serviceLogger } from "../lib/logger.js";
 export const  getArticlesController = asyncHandler( async(req, res) => {
     
         const { page , limit } = req.validated.query;
-        console.log(req.validated);
+       
         const result = await getArticles({
             page,
             limit,
@@ -23,7 +23,7 @@ export const  getArticlesController = asyncHandler( async(req, res) => {
 export const getArticleByIdController = asyncHandler( async(req, res) => {
    
         const {articleId} = req.validated.params; 
-        console.log(req.validated);   
+          
         
         const article = await getArticleById(articleId);
         return res.status(200).json({

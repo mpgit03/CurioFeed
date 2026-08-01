@@ -1,4 +1,4 @@
-import { updatePreferencesSchema } from "../validators/userValidator.js";
+
 import { updateUserPreferences,} from "../services/userService.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
@@ -10,7 +10,7 @@ export const updatePreferences = asyncHandler( async (req, res) => {
 
   await updateUserPreferences(
     clerkId,
-    validatedData.topicIds
+    topicIds
   );
 
   return res.status(200)
