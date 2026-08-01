@@ -1,6 +1,6 @@
 # CurioFeed
 
-::: {align="center"}
+<div align = "center">
 # 📰 CurioFeed
 
 ### AI-Powered Personalized News Aggregation Platform
@@ -302,7 +302,7 @@ Planned screenshots:
 
 
 
-::: {align="center"}
+</div>
 **Built as a production-oriented backend engineering portfolio
 project.**
 
