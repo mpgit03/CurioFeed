@@ -10,7 +10,7 @@ export default function ErrorFeed({
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center px-6 text-center">
       <h2 className="text-2xl font-semibold text-gray-900">
-        Couldn't load your feed
+       Couldn&#39;t load your feed
       </h2>
 
       <p className="mt-3 max-w-md text-gray-500">

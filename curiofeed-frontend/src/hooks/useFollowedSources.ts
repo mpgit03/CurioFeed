@@ -3,7 +3,7 @@
 
 import { useAuth } from "@clerk/nextjs";
 import { getFollowedSourceIds } from "@/services/feed";
-import { useEffect,useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {follow,unfollow} from "@/services/feed"
 
 
@@ -16,33 +16,33 @@ export function useFollowedSources() {
     const [pendingSourceId, setPendingSourceId] = useState<string | null>(null);
 
     
-    useEffect(()=>{
-            loadFollowedSources();
-        },[]);
-        
+    
                 
 
-    async function loadFollowedSources() {
-        try{
+    const loadFollowedSources = useCallback(async () => {
+    try {
         setLoading(true);
+
         const token = await getToken();
-        if(!token){
+
+        if (!token) {
             setLoading(false);
-            return ;
+            return;
         }
 
-        const sourceIds = await getFollowedSourceIds({token});
+        const sourceIds = await getFollowedSourceIds({ token });
 
-        setFollowedSourceIds(sourceIds);
-        
-        }catch(error){
-        setError("Unable to load followed sources");
-        }finally{
-        setLoading(false);
+            setFollowedSourceIds(sourceIds);
+        } catch {
+            setError("Unable to load followed sources");
+        } finally {
+            setLoading(false);
         }
+    }, [getToken]);
 
-        
-    }
+    useEffect(() => {
+        loadFollowedSources();
+    }, [loadFollowedSources]);
 
     async function followSource(sourceId:string) {
         console.log("followSource called", sourceId);

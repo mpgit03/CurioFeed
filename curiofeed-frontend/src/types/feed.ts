@@ -40,7 +40,7 @@ export interface FeedListProps {
 
 export interface ArticleCardProps {
   article: FeedArticle;
-  isFollowing:Boolean,
+  isFollowing:boolean,
   onFollow:(sourceId: string) => void,
   onUnfollow:(sourceId: string) => void,
   isPending:boolean,
