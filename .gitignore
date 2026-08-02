@@ -33,3 +33,4 @@ build/
 
 #files
 .classification-output.json
+.vercel
