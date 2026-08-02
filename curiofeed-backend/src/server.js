@@ -10,7 +10,7 @@
   import logger from "./lib/logger.js";
   import redisConnection from "./config/redis.js";
   import prisma from "./lib/prisma.js";
-  import apiLimiter from "./middleware/rateLimiters.js";
+  
 
 
   import healthRoutes from "./routes/healthRoutes.js";

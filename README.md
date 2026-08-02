@@ -9,9 +9,10 @@
 ingests, classifies and ranks news articles using modern backend
 engineering practices.**
 
-> 🚧 **Status:** Active Development\
-> Live demo, screenshots and deployment links will be added after
-> production deployment.
+> 🚧 > ✅ **Status:** Production Deployed
+>
+> CurioFeed is deployed with a Next.js frontend on Vercel and an Express API on Render.
+> Recommendation Engine V2 and additional user features are currently under active development.
 
 ![Node.js](https://img.shields.io/badge/Node.js-22.x-339933?logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-5.x-black?logo=express)
@@ -20,7 +21,33 @@ engineering practices.**
 ![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)
 ![Redis](https://img.shields.io/badge/Redis-BullMQ-DC382D?logo=redis)
 ![Swagger](https://img.shields.io/badge/OpenAPI-Swagger-85EA2D?logo=swagger)
-:::
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?logo=tailwindcss&logoColor=white)
+![Clerk](https://img.shields.io/badge/Auth-Clerk-6C47FF)
+![BullMQ](https://img.shields.io/badge/BullMQ-Redis-DC382D)
+![Gemini](https://img.shields.io/badge/AI-Google_Gemini-4285F4?logo=google&logoColor=white)
+
+> **CurioFeed demonstrates how AI-powered recommendation systems can be built using asynchronous processing, distributed workers, and production-ready backend engineering practices.**
+
+---
+
+## 🌐 Live Demo
+
+**Frontend**
+
+https://curio-feed-wine.vercel.app
+
+**Backend API**
+
+https://curiofeed-api.onrender.com
+
+**Swagger Documentation**
+
+https://curiofeed-api.onrender.com/api-docs
+
+> **Note**
+> The backend uses Render's free tier, so the first request after inactivity may take a few seconds while the server wakes up.
+
 
 ------------------------------------------------------------------------
 
@@ -51,97 +78,116 @@ background workers while the API remains responsive.
 
 ------------------------------------------------------------------------
 
-## Architecture Overview
+## System Architecture
 
-``` text
-Users
-  │
-  ▼
-Next.js Frontend
-  │
-  ▼
-Express REST API
-  │
-  ├────────────── PostgreSQL (Neon)
-  │
-  ├────────────── Clerk Authentication
-  │
-  ▼
-Redis (BullMQ)
-  │
-  ├──────── RSS Worker
-  └──────── AI Classification Worker
-                │
-                ▼
-             Gemini API
+```text
+                           Users
+                             │
+                             ▼
+                  Next.js Frontend (Vercel)
+                             │
+                    HTTPS + Clerk JWT
+                             │
+                             ▼
+                  Express REST API (Render)
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ▼              ▼              ▼
+      PostgreSQL (Neon)   Clerk Auth   Redis (BullMQ)
+                                             │
+                      ┌──────────────────────┴──────────────────────┐
+                      ▼                                             ▼
+              RSS Ingestion Worker                    AI Classification Worker
+                      │                                             │
+                      └──────────────────────┬──────────────────────┘
+                                             ▼
+                                        Gemini API
 ```
 
 ------------------------------------------------------------------------
 
-## Recommendation Flow
+## Recommendation Pipeline
 
 ``` text
-User Preferences
-      │
-Candidate Articles
-      │
-Topic Matching
-      │
-Confidence Scoring
-      │
-Recency Boost
-      │
-Rank Articles
-      │
-Personalized Feed
+                  User Preferences
+                          │
+                          ▼
+        Recently Classified Candidate Articles
+                          │
+                          ▼
+          AI Topic Confidence Matching
+                          │
+                          ▼
+              Personalized Relevance Score
+                          │
+                          ▼
+                  Recency Score Boost
+                          │
+                          ▼
+               Final Ranking & Sorting
+                          │
+                          ▼
+                Personalized Feed Response
 ```
 
-Ranking combines:
+The recommendation engine ranks articles by combining:
 
--   Primary topic confidence
--   Secondary topic confidence
--   Publication recency
+- Primary topic confidence
+- Secondary topic confidence
+- User topic preferences
+- Publication recency
+
+Topic confidence scores are generated asynchronously by the AI classification pipeline and stored in PostgreSQL, allowing recommendation requests to remain fast without invoking AI during user requests.
 
 ------------------------------------------------------------------------
 
 ## Features
 
-### User Experience
+### Frontend
 
--   Personalized feed
--   Explore feed
--   India feed
--   Follow favourite news sources
--   Topic preference management
--   Secure authentication
+- 🎯 Personalized AI-powered news feed
+- 🌍 Explore feed for discovering new content
+- 🇮🇳 India-specific news feed
+- ⭐ Follow and unfollow news sources
+- 🔐 Secure authentication with Clerk
+- 📱 Responsive modern UI built with Next.js
 
-### Backend
+### Backend Platform
 
--   RSS ingestion
--   AI topic classification
--   Queue-based background processing
--   Redis-backed BullMQ workers
--   Prisma ORM
--   PostgreSQL
--   Request validation with Zod
--   Swagger/OpenAPI
--   Centralized error handling
--   Rate limiting
--   Health endpoint
+- 📰 Automated RSS ingestion pipeline
+- 🤖 AI-powered topic classification using Gemini
+- ⚡ Asynchronous background processing with BullMQ
+- 🧠 Confidence-based recommendation engine
+- 🗄 PostgreSQL + Prisma ORM
+- 🚦 Redis-backed distributed rate limiting
+- 📖 OpenAPI / Swagger documentation
+- ✅ Request validation with Zod
+- 📈 Structured logging using Pino
+- ❤️ Health monitoring endpoint
+- 🔄 Graceful shutdown
+- 🛡 Startup dependency validation
+
+### Background Processing
+
+- RSS ingestion runs independently from user requests.
+- AI topic classification executes asynchronously through BullMQ workers.
+- Recommendation requests never invoke AI directly, ensuring low response latency.
 
 ------------------------------------------------------------------------
 
 ## Technology Stack
 
-  Layer           Technologies
-  --------------- -----------------------
-  Frontend        Next.js, React, Clerk
-  Backend         Node.js, Express 5
-  Database        PostgreSQL, Prisma
-  Queue           Redis, BullMQ
-  AI              Gemini
-  Documentation   Swagger / OpenAPI
-  Deployment      Render, Vercel
+| Layer | Technologies |
+|--------|--------------|
+| **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS, Clerk |
+| **Backend** | Node.js, Express 5, Prisma ORM, Zod |
+| **Database** | PostgreSQL (Neon) |
+| **Queue & Workers** | Redis, BullMQ |
+| **AI** | Google Gemini |
+| **Authentication** | Clerk |
+| **Documentation** | OpenAPI (Swagger) |
+| **Logging** | Pino |
+| **Deployment** | Vercel, Render |
 
 ------------------------------------------------------------------------
 
@@ -235,52 +281,110 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 
 ------------------------------------------------------------------------
 
-## Deployment
+## Production Deployment
 
-  Component     Platform
-  ------------- --------------------------
-  Frontend      Vercel
-  Backend API   Render
-  PostgreSQL    Neon
-  Redis         Render Redis
-  RSS Worker    Render Background Worker
-  AI Worker     Render Background Worker
+| Component | Platform |
+|-----------|----------|
+| Frontend | Vercel |
+| Backend API | Render Web Service |
+| PostgreSQL | Neon |
+| Redis | Render Key Value |
+| Authentication | Clerk |
+| AI | Google Gemini |
+| RSS Worker | Render Background Worker *(optional deployment)* |
+| AI Classification Worker | Render Background Worker *(optional deployment)* |
+
+> **Note**
+>
+> The API and background workers are deployed independently.
+> This architecture allows ingestion and AI classification to scale separately from user-facing requests.
 
 ------------------------------------------------------------------------
 
 ## Engineering Decisions
 
--   Thin controllers with business logic isolated in services
--   Queue-based asynchronous processing
--   Dedicated background workers
--   Startup dependency validation
--   Graceful shutdown lifecycle
--   Modular OpenAPI documentation
--   Centralized error handling
--   Structured logging
+CurioFeed was designed to follow production-oriented backend engineering principles rather than focusing solely on feature implementation.
+
+### Service-Oriented Architecture
+
+- Thin controllers with business logic encapsulated in service layers.
+- Clear separation between routing, business logic and data access.
+- Modular feature-based project structure.
+
+### Asynchronous Processing
+
+- RSS ingestion executes independently of user requests.
+- AI-powered article classification is delegated to BullMQ workers.
+- Expensive operations never block API response times.
+
+### Reliability
+
+- Startup dependency validation verifies PostgreSQL and Redis before accepting requests.
+- Graceful shutdown ensures HTTP server, Prisma and Redis connections close cleanly.
+- Background jobs automatically retry transient failures.
+
+### Scalability
+
+- Redis-backed distributed rate limiting.
+- Background workers can scale independently from the API.
+- Stateless REST API suitable for horizontal scaling.
+
+### Observability
+
+- Structured logging with Pino.
+- Centralized error handling.
+- Health endpoint for infrastructure monitoring.
+
+### API Design
+
+- RESTful API design.
+- OpenAPI (Swagger) documentation.
+- Request validation using Zod.
+
+## Design Philosophy
+
+CurioFeed prioritizes responsiveness by moving computationally expensive work—such as RSS ingestion and AI classification—into asynchronous background workers. User requests interact only with preprocessed data, allowing recommendation APIs to remain fast, predictable and scalable while keeping the architecture modular and production-ready.
 
 ------------------------------------------------------------------------
+
+## Production Features
+
+- 🔐 Clerk JWT authentication
+- ⚡ Redis-backed distributed rate limiting
+- 📈 Structured request logging with Pino
+- ❤️ Health monitoring endpoint
+- 🔄 Graceful shutdown lifecycle
+- ✅ Startup dependency validation
+- 📚 OpenAPI (Swagger) documentation
+- 🛡 Request validation using Zod
+- 🔁 Background job retries with exponential backoff
+- 🌍 Environment-based configuration
+
+-------------------------------------------------------------------------
 
 ## Roadmap
 
 ### Recommendation Engine
 
--   Collaborative filtering
--   Click tracking
--   Recommendation V2
+- [ ] Recommendation Engine V2
+- [ ] Click-through ranking
+- [ ] Collaborative filtering
+- [ ] Source diversity optimization
 
 ### User Features
 
--   Bookmarks
--   Collections
--   Reading history
+- [ ] Bookmarks
+- [ ] Collections
+- [ ] Search
+- [ ] Reading history
 
-### Infrastructure
+### Platform
 
--   CI/CD
--   Monitoring
--   Docker Compose
--   Metrics
+- [ ] Docker Compose
+- [ ] CI/CD pipeline
+- [ ] Monitoring & metrics
+- [ ] User-based rate limiting
+- [ ] Background worker autoscaling
 
 ------------------------------------------------------------------------
 
@@ -303,8 +407,13 @@ Planned screenshots:
 
 
 </div>
-**Built as a production-oriented backend engineering portfolio
-project.**
+---
 
-⭐ If you found CurioFeed interesting, consider starring the repository.
-:::
+## Acknowledgements
+
+CurioFeed was built as a production-oriented backend engineering project to explore scalable system design, asynchronous processing, AI-assisted content classification, and modern full-stack development practices.
+
+---
+
+⭐ If you found CurioFeed interesting, consider giving the repository a star.
+

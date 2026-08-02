@@ -8,18 +8,6 @@ const createRedisStore = (prefix) =>
         prefix,
     });
 
-const apiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit: 5,
-
-    standardHeaders: true,
-    legacyHeaders: false,
-
-    message: {
-        success: false,
-        message: "Too many requests. Please try again later.",
-    },
-});
 
 
 const baseConfig = {
@@ -37,13 +25,13 @@ const baseConfig = {
 export const readLimiter = rateLimit({
     ...baseConfig,
     store: createRedisStore("rl:read:"),
-    limit: 3,
+    limit: 300,
 });
 
 export const writeLimiter = rateLimit({
     ...baseConfig,
     store: createRedisStore("rl:write:"),
-    limit: 60,
+    limit: 30,
 });
 
 export const generalLimiter = rateLimit({
@@ -58,4 +46,4 @@ export const authLimiter = rateLimit({
     limit: 20,
 });
 
-export default apiLimiter;
+
