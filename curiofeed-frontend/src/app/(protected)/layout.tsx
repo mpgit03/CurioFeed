@@ -9,12 +9,12 @@ export default function ProtectedLayout({
 }) {
   return (
     <>
-      <Navbar />
-      <FeedTabs activeTab="my-feed"/>
+  <Navbar />
+  <FeedTabs />
 
-    <main className="min-h-screen bg-white">
-        {children}
-    </main>
-    </>
+  <main className="min-h-screen bg-white">
+    {children}
+  </main>
+</>
   );
 }
