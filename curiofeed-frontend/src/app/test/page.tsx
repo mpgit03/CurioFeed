@@ -1,28 +1,25 @@
 "use client";
 
-import { useAuth, SignInButton } from "@clerk/nextjs";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function TestPage() {
-  const { getToken, userId, isSignedIn } = useAuth();
-
-  const handleClick = async () => {
-    const token = await getToken();
-
-    console.log("isSignedIn:", isSignedIn);
-    console.log("User:", userId);
-    console.log("Token:", token);
-  };
+  const { user, loading, error } = useCurrentUser();
 
   return (
-    <div className="p-10">
-      <SignInButton />
+    <div style={{ padding: 20 }}>
+      <h2>Current User Hook</h2>
 
-      <button
-        onClick={handleClick}
-        className="border p-4 ml-4"
-      >
-        Get Token
-      </button>
+      <pre>
+        {JSON.stringify(
+          {
+            loading,
+            error,
+            user,
+          },
+          null,
+          2
+        )}
+      </pre>
     </div>
   );
 }

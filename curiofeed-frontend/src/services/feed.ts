@@ -1,13 +1,67 @@
-import { FeedArticle } from "@/types/feed";
+import { FeedArticle, FeedTopic } from "@/types/feed";
 
 
 
 const API_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL;
 
+interface TopicsResponse {
+  success: boolean;
+  data: FeedTopic[];
+}
+
+interface PreferencesPayload {
+  topicIds: string[];
+}
+
 interface FeedResponse {
   success: boolean;
   feed: FeedArticle[];
+}
+
+export async function getTopics(): Promise<FeedTopic[]> {
+  const response = await fetch(
+    `${API_URL}/api/v1/topics`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch topics");
+  }
+
+  const data: TopicsResponse =
+    await response.json();
+
+  return data.data;
+}
+
+export async function savePreferences({
+  token,
+  topicIds,
+}: {
+  token: string;
+  topicIds: string[];
+}) {
+  const response = await fetch(
+    `${API_URL}/api/v1/users/preferences`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        topicIds,
+      } satisfies PreferencesPayload),
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message ?? "Failed to save preferences");
+  }
+
+  return data;
 }
 
 export async function getArticles(

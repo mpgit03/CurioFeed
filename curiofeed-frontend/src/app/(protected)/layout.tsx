@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Navbar from "@/components/layout/Navbar";
 import FeedTabs from "@/components/layout/FeedTabs";
+import OnboardingGuard from "@/components/auth/OnboardingGuard";
 
 export default function ProtectedLayout({
   children,
@@ -9,12 +10,12 @@ export default function ProtectedLayout({
 }) {
   return (
     <>
-  <Navbar />
-  <FeedTabs />
+      <Navbar />
+      <FeedTabs />
 
-  <main className="min-h-screen bg-white">
-    {children}
-  </main>
-</>
+      <main className="min-h-screen bg-white">
+        <OnboardingGuard>{children}</OnboardingGuard>
+      </main>
+    </>
   );
 }

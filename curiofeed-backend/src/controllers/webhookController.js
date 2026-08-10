@@ -7,6 +7,7 @@ import { ApiError } from "../utils/ApiError.js";
 
 export const clerkWebhookHandler =
   async (req, res) => {
+    
     try {
       const webhookSecret =
         process.env.CLERK_WEBHOOK_SECRET;
