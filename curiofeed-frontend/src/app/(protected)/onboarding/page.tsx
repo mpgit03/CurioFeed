@@ -81,10 +81,18 @@ export default function OnboardingPage() {
         topicIds: selectedTopicIds,
       });
 
-      // Refresh the current user so onboardingCompleted is updated
-      await refetch();
+      const freshUser = await refetch({ force: true });
 
-      // Replace instead of push so user can't go back to onboarding
+      if (!freshUser) {
+        throw new Error("Unable to refresh your account state");
+      }
+
+      if (!freshUser.onboardingCompleted) {
+        throw new Error("Account setup is still incomplete");
+      }
+
+      // Replace instead of push so user can't go back to onboarding.
+      // Only redirect after the fresh /me response confirms onboarding is complete.
       router.replace("/my-feed");
     } catch (saveError) {
       const message =
