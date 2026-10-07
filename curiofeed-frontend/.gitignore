@@ -42,3 +42,7 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# ignore bulky HTML quickstart files
+clerk_quickstart.html
+docs_quickstart.html
