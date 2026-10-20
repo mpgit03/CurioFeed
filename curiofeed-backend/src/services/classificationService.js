@@ -3,7 +3,7 @@
 import { GoogleGenAI } from "@google/genai";
 import prisma from "../lib/prisma.js";
 import { serviceLogger } from "../lib/logger.js";
-import { persistArticleTopics } from "./articletopicService.js";
+import { persistArticleTopics } from "./articleTopicService.js";
 import {CLASSIFICATION_MODEL} from "../constants/classification.js";
 import { validateClassificationResponse } from "../validators/classificaitonValidators.js";
 
